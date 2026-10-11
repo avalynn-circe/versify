@@ -1,0 +1,13 @@
+{
+  "id": "dickinson",
+  "name": "Emily Dickinson",
+  "color": "#6b4e8f",
+  "source": {
+    "title": "Poems by Emily Dickinson, Three Series, Complete",
+    "editors": "Mabel Loomis Todd and T. W. Higginson",
+    "edition": "First, Second and Third Series, 1890, 1891 and 1896, Roberts Brothers, Boston. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/12242",
+    "gutenberg_id": 12242,
+    "note": "Only the 1890s Todd and Higginson editions on Gutenberg are public domain. The Johnson (1955) and Franklin (1998) editions are under copyright and must not be used. Confirm the URL and edition against the downloaded file before building."
+  }
+}

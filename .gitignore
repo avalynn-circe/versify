@@ -1,0 +1,8 @@
+# Raw and cleaned Gutenberg texts are inputs, not part of the skill.
+sources/raw/
+sources/clean/
+__pycache__/
+*.pyc
+*.skill
+review/*.bak
+.DS_Store

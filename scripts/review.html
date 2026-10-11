@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Versify review</title>
+<style>
+  :root { --bg:#fbf8f3; --fg:#222; --muted:#7a7268; --line:#e4ddd2; --ok:#2f7d4f; --no:#b23b3b; --pend:#8a6d1f; --hl:#fff1c9; }
+  body { margin:0; font:15px/1.4 Georgia, serif; background:var(--bg); color:var(--fg); }
+  header { position:sticky; top:0; background:var(--bg); border-bottom:1px solid var(--line); padding:10px 18px; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0 12px 0 0; font-weight:normal; }
+  .pill { padding:2px 10px; border:1px solid var(--line); border-radius:999px; cursor:pointer; background:#fff; }
+  .pill.on { background:#222; color:#fff; border-color:#222; }
+  #progress { color:var(--muted); }
+  #saved { color:var(--muted); font-size:13px; }
+  input[type=search] { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px; width:200px; }
+  main { padding:8px 18px 80px; }
+  table { border-collapse:collapse; width:100%; }
+  tr { border-bottom:1px solid var(--line); }
+  tr.cur { background:var(--hl); }
+  td { padding:5px 8px; vertical-align:top; }
+  td.frag { font-size:17px; width:40%; }
+  td.num { color:var(--muted); font-variant-numeric:tabular-nums; width:70px; text-align:right; }
+  td.type { color:var(--muted); width:50px; }
+  td.status { width:90px; font-family:ui-monospace, monospace; font-size:13px; }
+  .approved { color:var(--ok); } .rejected { color:var(--no); } .pending { color:var(--pend); }
+  .stale { color:var(--muted); font-style:italic; }
+  footer { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line); padding:8px 18px; font-size:13px; color:var(--muted); }
+  kbd { font-family:ui-monospace, monospace; background:#eee; padding:0 5px; border-radius:4px; color:#222; }
+  #more { margin:12px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Versify review: <span id="poet"></span></h1>
+  <span>type:</span>
+  <span class="pill" data-type="pair">pairs</span>
+  <span class="pill" data-type="word">words</span>
+  <span>status:</span>
+  <span class="pill" data-status="pending">pending</span>
+  <span class="pill" data-status="approved">approved</span>
+  <span class="pill" data-status="rejected">rejected</span>
+  <span class="pill" data-status="all">all</span>
+  <input type="search" id="q" placeholder="search  ( / )">
+  <span id="progress"></span>
+  <span id="saved"></span>
+</header>
+<main>
+  <table><tbody id="rows"></tbody></table>
+  <button id="more" hidden>show more</button>
+</main>
+<footer>
+  <kbd>j</kbd>/<kbd>k</kbd> or arrows move &nbsp; <kbd>a</kbd> approve &nbsp; <kbd>r</kbd> reject &nbsp; <kbd>p</kbd> back to pending &nbsp;
+  <kbd>s</kbd> split pair &nbsp; <kbd>m</kbd> merge two words into a pair &nbsp; <kbd>u</kbd> undo &nbsp;
+  <kbd>A</kbd> approve all shown &nbsp; <kbd>R</kbd> reject all shown &nbsp; <kbd>1</kbd> pairs <kbd>2</kbd> words
+</footer>
+<script>
+(() => {
+  let review = null, poet = "";
+  let type = "pair", status = "pending", query = "";
+  let shown = [], cur = 0, limit = 400;
+  const undo = [];
+  let saveTimer = null;
+
+  const $ = (s) => document.querySelector(s);
+  const key = (it) => it.type + ":" + it.fragment;
+
+  async function load() {
+    const r = await fetch("/api/state"); const d = await r.json();
+    review = d.review; poet = d.poet;
+    $("#poet").textContent = poet;
+    render();
+  }
+
+  function filtered() {
+    const q = query.trim().toLowerCase();
+    return review.items.filter(it =>
+      it.type === type &&
+      (status === "all" || it.status === status) &&
+      (!q || it.fragment.includes(q)));
+  }
+
+  function progress() {
+    const pairs = review.items.filter(i => i.type === "pair");
+    const words = review.items.filter(i => i.type === "word");
+    const pp = pairs.filter(i => i.status === "pending").length;
+    const wp = words.filter(i => i.status === "pending").length;
+    $("#progress").textContent = `pairs: ${pairs.length - pp}/${pairs.length} decided, words: ${words.length - wp}/${words.length} decided`;
+  }
+
+  function render() {
+    shown = filtered();
+    if (cur >= shown.length) cur = Math.max(0, shown.length - 1);
+    const tb = $("#rows"); tb.innerHTML = "";
+    shown.slice(0, limit).forEach((it, i) => {
+      const tr = document.createElement("tr");
+      if (i === cur) tr.className = "cur";
+      tr.innerHTML = `<td class="frag">${esc(it.fragment)}${it.stale ? ' <span class="stale">(stale)</span>' : ''}${it.manual ? ' <span class="stale">(manual)</span>' : ''}</td>` +
+        `<td class="num">${it.count}</td><td class="num">${it.pmi ?? ""}</td>` +
+        `<td class="type">${it.type}</td><td class="status ${it.status}">${it.status}</td>`;
+      tr.addEventListener("click", () => { cur = i; render(); });
+      tb.appendChild(tr);
+    });
+    $("#more").hidden = shown.length <= limit;
+    document.querySelectorAll(".pill[data-type]").forEach(p => p.classList.toggle("on", p.dataset.type === type));
+    document.querySelectorAll(".pill[data-status]").forEach(p => p.classList.toggle("on", p.dataset.status === status));
+    progress();
+    const row = tb.children[cur]; if (row) row.scrollIntoView({ block: "nearest" });
+  }
+
+  function esc(s) { return s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+  function save() {
+    $("#saved").textContent = "saving";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      const r = await fetch("/api/save", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(review) });
+      $("#saved").textContent = r.ok ? "saved" : "save failed";
+    }, 250);
+  }
+
+  function setStatus(items, s) {
+    const snapshot = items.map(it => ({ it, status: it.status }));
+    undo.push(() => snapshot.forEach(({ it, status }) => it.status = status));
+    items.forEach(it => it.status = s);
+    save();
+  }
+
+  function act(s) {
+    const it = shown[cur]; if (!it) return;
+    setStatus([it], s);
+    // In the pending view the item disappears, so the cursor stays put and lands on the next one.
+    if (status !== "all" && status !== s) { /* keep cur */ } else { cur = Math.min(cur + 1, shown.length - 1); }
+    render();
+  }
+
+  function split() {
+    const it = shown[cur]; if (!it || it.type !== "pair") return;
+    const [a, b] = it.fragment.split(" ");
+    const words = review.items.filter(w => w.type === "word" && (w.fragment === a || w.fragment === b));
+    const snapshot = [it, ...words].map(x => ({ x, status: x.status }));
+    undo.push(() => snapshot.forEach(({ x, status }) => x.status = status));
+    it.status = "rejected";
+    words.forEach(w => w.status = "approved");
+    save(); render();
+  }
+
+  async function merge() {
+    const raw = prompt("Merge two words into a pair (type them with a space):", shown[cur] && shown[cur].type === "word" ? shown[cur].fragment + " " : "");
+    if (!raw) return;
+    const parts = raw.trim().toLowerCase().split(/\s+/);
+    if (parts.length !== 2) { alert("A pair is exactly two words."); return; }
+    const frag = parts.join(" ");
+    let existing = review.items.find(i => i.type === "pair" && i.fragment === frag);
+    const r = await fetch(`/api/pair?a=${encodeURIComponent(parts[0])}&b=${encodeURIComponent(parts[1])}`);
+    const { count } = await r.json();
+    if (count === 0 && !confirm(`"${frag}" never appears adjacent in the source. Add it anyway?`)) return;
+    if (existing) {
+      undo.push(((it, s) => () => it.status = s)(existing, existing.status));
+      existing.status = "approved";
+    } else {
+      existing = { fragment: frag, type: "pair", count, status: "approved", manual: true };
+      review.items.push(existing);
+      undo.push(() => { review.items = review.items.filter(i => i !== existing); });
+    }
+    save(); render();
+  }
+
+  function bulk(s) {
+    if (!shown.length) return;
+    if (!confirm(`Mark all ${shown.length} shown ${type}s as ${s}?`)) return;
+    setStatus(shown, s); render();
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.target === $("#q")) { if (e.key === "Escape" || e.key === "Enter") { e.target.blur(); } return; }
+    const k = e.key;
+    if (k === "j" || k === "ArrowDown") { cur = Math.min(cur + 1, shown.length - 1); render(); e.preventDefault(); }
+    else if (k === "k" || k === "ArrowUp") { cur = Math.max(cur - 1, 0); render(); e.preventDefault(); }
+    else if (k === "a") act("approved");
+    else if (k === "r") act("rejected");
+    else if (k === "p") act("pending");
+    else if (k === "s") split();
+    else if (k === "m") merge();
+    else if (k === "u") { const f = undo.pop(); if (f) { f(); save(); render(); } }
+    else if (k === "A") bulk("approved");
+    else if (k === "R") bulk("rejected");
+    else if (k === "1") { type = "pair"; cur = 0; render(); }
+    else if (k === "2") { type = "word"; cur = 0; render(); }
+    else if (k === "/") { $("#q").focus(); e.preventDefault(); }
+  });
+  document.querySelectorAll(".pill[data-type]").forEach(p => p.addEventListener("click", () => { type = p.dataset.type; cur = 0; render(); }));
+  document.querySelectorAll(".pill[data-status]").forEach(p => p.addEventListener("click", () => { status = p.dataset.status; cur = 0; render(); }));
+  $("#q").addEventListener("input", (e) => { query = e.target.value; cur = 0; render(); });
+  $("#more").addEventListener("click", () => { limit += 400; render(); });
+  load();
+})();
+</script>
+</body>
+</html>

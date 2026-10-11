@@ -1,0 +1,13 @@
+{
+  "id": "poe",
+  "name": "Edgar Allan Poe",
+  "color": "#2e2a3b",
+  "source": {
+    "title": "The Complete Poetical Works of Edgar Allan Poe",
+    "editors": "J. H. Ingram (introduction and notes, stripped during ingest)",
+    "edition": "Project Gutenberg edition. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/10031",
+    "gutenberg_id": 10031,
+    "note": "Confirm the URL and edition against the downloaded file before building. Strip Ingram's introduction, the essays and the notes so only the poems remain."
+  }
+}

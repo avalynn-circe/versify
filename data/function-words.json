@@ -1,0 +1,16 @@
+{
+  "note": "Words propose.py treats as grammar rather than meaning. They default to pending in review instead of approved, and never form half of a proposed pair. Edit freely.",
+  "words": [
+    "a", "an", "the", "and", "or", "but", "nor", "so", "yet", "for",
+    "of", "in", "on", "at", "to", "by", "with", "from", "into", "upon", "unto",
+    "as", "than", "that", "this", "these", "those", "which", "who", "whom", "whose", "what",
+    "i", "me", "my", "mine", "we", "us", "our", "ours", "you", "your", "yours",
+    "he", "him", "his", "she", "her", "hers", "it", "its", "they", "them", "their", "theirs",
+    "thou", "thee", "thy", "thine", "ye",
+    "is", "am", "are", "was", "were", "be", "been", "being",
+    "do", "does", "did", "have", "has", "had",
+    "will", "would", "shall", "should", "can", "could", "may", "might", "must",
+    "not", "no", "if", "then", "there", "here", "when", "where", "how", "why",
+    "o", "oh", "ah", "'tis", "'twas", "o'er", "e'er", "ne'er"
+  ]
+}
