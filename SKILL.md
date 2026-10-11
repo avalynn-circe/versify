@@ -31,11 +31,22 @@ poet per day, so the same day always yields the same draw.
 
 2. **Compose.** Write a poem using exactly `use` of the dealt fragments.
    The hard rules, which the checker enforces:
-   - Each fragment at most once. A `pair` fragment stays together, in
-     order, on one line. It counts as one fragment.
-   - Each glue word may be spent once. You need not spend any.
+   - Exactly `use` distinct fragments. A `pair` fragment stays together,
+     in order, on one line, and counts as one.
+   - One refrain is allowed: a single fragment may appear twice if both
+     appearances end a line. Any other repeat is a violation.
+   - Glue comes in two kinds, listed in the draw. `free` glue (articles
+     and the smallest connectives) is unlimited, so the poem can be
+     grammatical English; use as much as the sentences need. `once` glue
+     (I, you, my, not, but) may be spent one time each, because those
+     words set the poem's stance and that stance should come from the
+     fragments.
    - Nothing else. No word outside the draw and the glue, and no change
      of form: if the bank dealt "soul" you may not write "souls".
+   - Between the line counts the draw gives in `lines`, normally four to
+     eight. Fewer gets dense, more gets thin.
+   - The last word of the poem is a fragment, and it should be a noun or
+     a verb: a thing or an act, never a modifier and never glue.
    - Line breaks, capitalization and punctuation are free. No em dashes,
      even for Dickinson; a line break or a comma does that work.
    - No title. The colophon after the poem is the only heading.
@@ -52,8 +63,10 @@ poet per day, so the same day always yields the same draw.
       such line, as the opening or the close.
    c. **Plain grammar.** Every line must read as English a stranger could
       paraphrase. If you cannot say in prose what a line means, it is
-      word salad: cut it or rebuild it. Glue exists to make grammar, not
-      to fill space. Do not invert word order to sound antique.
+      word salad: cut it or rebuild it. Free glue is there so every line
+      can be a sentence or a clear phrase; "the" and "and" cost nothing,
+      so never write "heads in row" when you mean "heads in a row". Do
+      not invert word order to sound antique.
    d. **One gesture per line,** two to six words. Each line adds one
       image, one turn, or one claim. Do not stack three adjectives.
    e. **Use the pairs.** They are phrases the poet actually wrote, and
@@ -85,20 +98,19 @@ poet per day, so the same day always yields the same draw.
    taste good-by.
    ```
 
-   A poem (one image, autumn dawn; plain grammar; the pair used whole; a
-   short concrete ending). It is an illustration of the method, not a
-   template: never reuse its lines or its shape, even on a day that deals
-   some of the same words:
+   A poem (one image, autumn dawn; plain grammar with free glue doing the
+   joining; the pair used whole; a short concrete ending). It is an
+   illustration of the method, not a template: never reuse its lines or
+   its shape, even on a day that deals some of the same words:
 
    ```
-   Scarlet morns,
-   auburn mists,
-   breezes slow, slow.
-   The year's electricity
-   is ceded to firmaments.
-   Cold water,
-   heads in a row.
-   I taste good-by.
+   The mists were scarlet,
+   the morns auburn and cold.
+   The breezes, slow, slow,
+   bear the year's electricity
+   to the firmaments.
+   I stole a taste of the water.
+   Good-by.
    ```
 
 3. **Verify.** Save the poem to a file and run the checker:

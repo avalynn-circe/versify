@@ -9,193 +9,225 @@
       "fragment": "the",
       "type": "word",
       "count": 1790,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "a",
       "type": "word",
       "count": 751,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "and",
       "type": "word",
       "count": 750,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "to",
       "type": "word",
       "count": 624,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "i",
       "type": "word",
       "count": 563,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "of",
       "type": "word",
       "count": 523,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "that",
       "type": "word",
       "count": 353,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "it",
       "type": "word",
       "count": 353,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "in",
       "type": "word",
       "count": 341,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "is",
       "type": "word",
       "count": 327,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "as",
       "type": "word",
       "count": 240,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "for",
       "type": "word",
       "count": 228,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "my",
       "type": "word",
       "count": 221,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "but",
       "type": "word",
       "count": 192,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "not",
       "type": "word",
       "count": 189,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "was",
       "type": "word",
       "count": 186,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "me",
       "type": "word",
       "count": 173,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "so",
       "type": "word",
       "count": 169,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "her",
       "type": "word",
       "count": 166,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "be",
       "type": "word",
       "count": 161,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "with",
       "type": "word",
       "count": 157,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "when",
       "type": "word",
       "count": 147,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "if",
       "type": "word",
       "count": 136,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "at",
       "type": "word",
       "count": 134,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "his",
       "type": "word",
       "count": 126,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "by",
       "type": "word",
       "count": 125,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "you",
       "type": "word",
       "count": 120,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "he",
       "type": "word",
       "count": 119,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "on",
       "type": "word",
       "count": 117,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "this",
       "type": "word",
       "count": 115,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "then",
       "type": "word",
       "count": 114,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "or",
       "type": "word",
       "count": 114,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "like",
@@ -207,31 +239,36 @@
       "fragment": "we",
       "type": "word",
       "count": 112,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "an",
       "type": "word",
       "count": 109,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "how",
       "type": "word",
       "count": 106,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "no",
       "type": "word",
       "count": 103,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "from",
       "type": "word",
       "count": 103,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "all",
@@ -249,13 +286,15 @@
       "fragment": "they",
       "type": "word",
       "count": 99,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "have",
       "type": "word",
       "count": 95,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "little",
@@ -267,43 +306,50 @@
       "fragment": "upon",
       "type": "word",
       "count": 90,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "are",
       "type": "word",
       "count": 88,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "had",
       "type": "word",
       "count": 86,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "were",
       "type": "word",
       "count": 85,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "will",
       "type": "word",
       "count": 83,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "could",
       "type": "word",
       "count": 82,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "what",
       "type": "word",
       "count": 79,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "just",
@@ -315,13 +361,15 @@
       "fragment": "their",
       "type": "word",
       "count": 74,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "there",
       "type": "word",
       "count": 70,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "too",
@@ -339,7 +387,8 @@
       "fragment": "would",
       "type": "word",
       "count": 65,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "know",
@@ -351,7 +400,8 @@
       "fragment": "its",
       "type": "word",
       "count": 64,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "away",
@@ -369,19 +419,22 @@
       "fragment": "him",
       "type": "word",
       "count": 60,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "who",
       "type": "word",
       "count": 58,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "she",
       "type": "word",
       "count": 57,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "never",
@@ -399,7 +452,8 @@
       "fragment": "than",
       "type": "word",
       "count": 56,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "such",
@@ -417,7 +471,8 @@
       "fragment": "our",
       "type": "word",
       "count": 51,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "life",
@@ -429,25 +484,29 @@
       "fragment": "where",
       "type": "word",
       "count": 51,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "can",
       "type": "word",
       "count": 49,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "should",
       "type": "word",
       "count": 49,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "yet",
       "type": "word",
       "count": 48,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "before",
@@ -495,25 +554,29 @@
       "fragment": "may",
       "type": "word",
       "count": 44,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "them",
       "type": "word",
       "count": 44,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "thee",
       "type": "word",
       "count": 43,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "did",
       "type": "word",
       "count": 42,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "still",
@@ -537,7 +600,8 @@
       "fragment": "has",
       "type": "word",
       "count": 39,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "now",
@@ -585,7 +649,8 @@
       "fragment": "us",
       "type": "word",
       "count": 36,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "god",
@@ -603,13 +668,15 @@
       "fragment": "nor",
       "type": "word",
       "count": 35,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "must",
       "type": "word",
       "count": 35,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "only",
@@ -621,7 +688,8 @@
       "fragment": "your",
       "type": "word",
       "count": 34,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "soul",
@@ -639,13 +707,15 @@
       "fragment": "do",
       "type": "word",
       "count": 32,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "mine",
       "type": "word",
       "count": 32,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "way",
@@ -711,7 +781,8 @@
       "fragment": "whose",
       "type": "word",
       "count": 28,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "morning",
@@ -723,7 +794,8 @@
       "fragment": "shall",
       "type": "word",
       "count": 28,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "put",
@@ -747,7 +819,8 @@
       "fragment": "which",
       "type": "word",
       "count": 27,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "thought",
@@ -759,7 +832,8 @@
       "fragment": "might",
       "type": "word",
       "count": 26,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "far",
@@ -795,7 +869,8 @@
       "fragment": "these",
       "type": "word",
       "count": 25,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "many",
@@ -843,7 +918,8 @@
       "fragment": "here",
       "type": "word",
       "count": 24,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "lost",
@@ -861,7 +937,8 @@
       "fragment": "unto",
       "type": "word",
       "count": 24,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "take",
@@ -897,7 +974,8 @@
       "fragment": "thou",
       "type": "word",
       "count": 22,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "fingers",
@@ -927,7 +1005,8 @@
       "fragment": "oh",
       "type": "word",
       "count": 21,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "man",
@@ -1077,7 +1156,8 @@
       "fragment": "am",
       "type": "word",
       "count": 18,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "each",
@@ -1203,7 +1283,8 @@
       "fragment": "those",
       "type": "word",
       "count": 16,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "breath",
@@ -1245,7 +1326,8 @@
       "fragment": "why",
       "type": "word",
       "count": 16,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "year",
@@ -1293,7 +1375,8 @@
       "fragment": "into",
       "type": "word",
       "count": 15,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "children",
@@ -1377,7 +1460,8 @@
       "fragment": "thy",
       "type": "word",
       "count": 15,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "round",
@@ -1395,7 +1479,8 @@
       "fragment": "been",
       "type": "word",
       "count": 15,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "died",
@@ -1593,7 +1678,8 @@
       "fragment": "whom",
       "type": "word",
       "count": 13,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "softly",
@@ -2115,7 +2201,8 @@
       "fragment": "thine",
       "type": "word",
       "count": 9,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "half",
@@ -2241,7 +2328,8 @@
       "fragment": "ah",
       "type": "word",
       "count": 9,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "quiet",
@@ -3171,7 +3259,8 @@
       "fragment": "being",
       "type": "word",
       "count": 6,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "hours",
@@ -3261,7 +3350,8 @@
       "fragment": "o",
       "type": "word",
       "count": 6,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "whole",
@@ -3993,7 +4083,8 @@
       "fragment": "does",
       "type": "word",
       "count": 5,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "laugh",
@@ -5631,7 +5722,8 @@
       "fragment": "o'er",
       "type": "word",
       "count": 4,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "sweetest",
@@ -7731,7 +7823,8 @@
       "fragment": "ne'er",
       "type": "word",
       "count": 2,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "fill",
@@ -8349,7 +8442,8 @@
       "fragment": "yours",
       "type": "word",
       "count": 2,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "uncertain",
@@ -14847,7 +14941,8 @@
       "fragment": "theirs",
       "type": "word",
       "count": 1,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "dolls",
@@ -14949,7 +15044,8 @@
       "fragment": "e'er",
       "type": "word",
       "count": 1,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "seraphim",
@@ -25011,7 +25107,8 @@
       "fragment": "ye",
       "type": "word",
       "count": 1,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "involves",
@@ -26625,7 +26722,8 @@
       "fragment": "'tis",
       "type": "word",
       "count": 1,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "harder",
@@ -29121,7 +29219,8 @@
       "fragment": "ours",
       "type": "word",
       "count": 1,
-      "status": "approved"
+      "status": "rejected",
+      "note": "function word; glue is the only source of these"
     },
     {
       "fragment": "dapperer",

@@ -14,7 +14,7 @@
   "voice": "Compressed and declarative. Short lines, often three to six words. Abstract nouns handled like physical objects: a grief with a weight, a noon with a door. One strange exact word beats three pretty ones. A capitalized noun mid-line is fine when it earns it. Her dashes are famous, but this project does not use em dashes; let the line break do the pausing, or use a comma.",
   "built": "2026-10-11",
   "counts": {
-    "words": 5320,
+    "words": 5221,
     "pairs": 121
   },
   "fragments": [
@@ -624,194 +624,9 @@
       "count": 2
     },
     {
-      "text": "the",
-      "type": "word",
-      "count": 1790
-    },
-    {
-      "text": "a",
-      "type": "word",
-      "count": 751
-    },
-    {
-      "text": "and",
-      "type": "word",
-      "count": 750
-    },
-    {
-      "text": "to",
-      "type": "word",
-      "count": 624
-    },
-    {
-      "text": "i",
-      "type": "word",
-      "count": 563
-    },
-    {
-      "text": "of",
-      "type": "word",
-      "count": 523
-    },
-    {
-      "text": "it",
-      "type": "word",
-      "count": 353
-    },
-    {
-      "text": "that",
-      "type": "word",
-      "count": 353
-    },
-    {
-      "text": "in",
-      "type": "word",
-      "count": 341
-    },
-    {
-      "text": "is",
-      "type": "word",
-      "count": 327
-    },
-    {
-      "text": "as",
-      "type": "word",
-      "count": 240
-    },
-    {
-      "text": "for",
-      "type": "word",
-      "count": 228
-    },
-    {
-      "text": "my",
-      "type": "word",
-      "count": 221
-    },
-    {
-      "text": "but",
-      "type": "word",
-      "count": 192
-    },
-    {
-      "text": "not",
-      "type": "word",
-      "count": 189
-    },
-    {
-      "text": "was",
-      "type": "word",
-      "count": 186
-    },
-    {
-      "text": "me",
-      "type": "word",
-      "count": 173
-    },
-    {
-      "text": "so",
-      "type": "word",
-      "count": 169
-    },
-    {
-      "text": "her",
-      "type": "word",
-      "count": 166
-    },
-    {
-      "text": "be",
-      "type": "word",
-      "count": 161
-    },
-    {
-      "text": "with",
-      "type": "word",
-      "count": 157
-    },
-    {
-      "text": "when",
-      "type": "word",
-      "count": 147
-    },
-    {
-      "text": "if",
-      "type": "word",
-      "count": 136
-    },
-    {
-      "text": "at",
-      "type": "word",
-      "count": 134
-    },
-    {
-      "text": "his",
-      "type": "word",
-      "count": 126
-    },
-    {
-      "text": "by",
-      "type": "word",
-      "count": 125
-    },
-    {
-      "text": "you",
-      "type": "word",
-      "count": 120
-    },
-    {
-      "text": "he",
-      "type": "word",
-      "count": 119
-    },
-    {
-      "text": "on",
-      "type": "word",
-      "count": 117
-    },
-    {
-      "text": "this",
-      "type": "word",
-      "count": 115
-    },
-    {
       "text": "like",
       "type": "word",
       "count": 114
-    },
-    {
-      "text": "or",
-      "type": "word",
-      "count": 114
-    },
-    {
-      "text": "then",
-      "type": "word",
-      "count": 114
-    },
-    {
-      "text": "we",
-      "type": "word",
-      "count": 112
-    },
-    {
-      "text": "an",
-      "type": "word",
-      "count": 109
-    },
-    {
-      "text": "how",
-      "type": "word",
-      "count": 106
-    },
-    {
-      "text": "from",
-      "type": "word",
-      "count": 103
-    },
-    {
-      "text": "no",
-      "type": "word",
-      "count": 103
     },
     {
       "text": "all",
@@ -824,69 +639,14 @@
       "count": 99
     },
     {
-      "text": "they",
-      "type": "word",
-      "count": 99
-    },
-    {
-      "text": "have",
-      "type": "word",
-      "count": 95
-    },
-    {
       "text": "little",
       "type": "word",
       "count": 91
     },
     {
-      "text": "upon",
-      "type": "word",
-      "count": 90
-    },
-    {
-      "text": "are",
-      "type": "word",
-      "count": 88
-    },
-    {
-      "text": "had",
-      "type": "word",
-      "count": 86
-    },
-    {
-      "text": "were",
-      "type": "word",
-      "count": 85
-    },
-    {
-      "text": "will",
-      "type": "word",
-      "count": 83
-    },
-    {
-      "text": "could",
-      "type": "word",
-      "count": 82
-    },
-    {
-      "text": "what",
-      "type": "word",
-      "count": 79
-    },
-    {
       "text": "just",
       "type": "word",
       "count": 78
-    },
-    {
-      "text": "their",
-      "type": "word",
-      "count": 74
-    },
-    {
-      "text": "there",
-      "type": "word",
-      "count": 70
     },
     {
       "text": "too",
@@ -897,16 +657,6 @@
       "text": "day",
       "type": "word",
       "count": 67
-    },
-    {
-      "text": "would",
-      "type": "word",
-      "count": 65
-    },
-    {
-      "text": "its",
-      "type": "word",
-      "count": 64
     },
     {
       "text": "know",
@@ -924,27 +674,7 @@
       "count": 62
     },
     {
-      "text": "him",
-      "type": "word",
-      "count": 60
-    },
-    {
-      "text": "who",
-      "type": "word",
-      "count": 58
-    },
-    {
-      "text": "she",
-      "type": "word",
-      "count": 57
-    },
-    {
       "text": "never",
-      "type": "word",
-      "count": 56
-    },
-    {
-      "text": "than",
       "type": "word",
       "count": 56
     },
@@ -969,32 +699,7 @@
       "count": 51
     },
     {
-      "text": "our",
-      "type": "word",
-      "count": 51
-    },
-    {
-      "text": "where",
-      "type": "word",
-      "count": 51
-    },
-    {
-      "text": "can",
-      "type": "word",
-      "count": 49
-    },
-    {
-      "text": "should",
-      "type": "word",
-      "count": 49
-    },
-    {
       "text": "before",
-      "type": "word",
-      "count": 48
-    },
-    {
-      "text": "yet",
       "type": "word",
       "count": 48
     },
@@ -1029,26 +734,6 @@
       "count": 44
     },
     {
-      "text": "may",
-      "type": "word",
-      "count": 44
-    },
-    {
-      "text": "them",
-      "type": "word",
-      "count": 44
-    },
-    {
-      "text": "thee",
-      "type": "word",
-      "count": 43
-    },
-    {
-      "text": "did",
-      "type": "word",
-      "count": 42
-    },
-    {
       "text": "out",
       "type": "word",
       "count": 42
@@ -1057,11 +742,6 @@
       "text": "still",
       "type": "word",
       "count": 42
-    },
-    {
-      "text": "has",
-      "type": "word",
-      "count": 39
     },
     {
       "text": "more",
@@ -1104,11 +784,6 @@
       "count": 36
     },
     {
-      "text": "us",
-      "type": "word",
-      "count": 36
-    },
-    {
       "text": "without",
       "type": "word",
       "count": 36
@@ -1119,22 +794,7 @@
       "count": 35
     },
     {
-      "text": "must",
-      "type": "word",
-      "count": 35
-    },
-    {
-      "text": "nor",
-      "type": "word",
-      "count": 35
-    },
-    {
       "text": "only",
-      "type": "word",
-      "count": 34
-    },
-    {
-      "text": "your",
       "type": "word",
       "count": 34
     },
@@ -1147,16 +807,6 @@
       "text": "soul",
       "type": "word",
       "count": 33
-    },
-    {
-      "text": "do",
-      "type": "word",
-      "count": 32
-    },
-    {
-      "text": "mine",
-      "type": "word",
-      "count": 32
     },
     {
       "text": "feet",
@@ -1219,16 +869,6 @@
       "count": 28
     },
     {
-      "text": "shall",
-      "type": "word",
-      "count": 28
-    },
-    {
-      "text": "whose",
-      "type": "word",
-      "count": 28
-    },
-    {
       "text": "love",
       "type": "word",
       "count": 27
@@ -1239,22 +879,12 @@
       "count": 27
     },
     {
-      "text": "which",
-      "type": "word",
-      "count": 27
-    },
-    {
       "text": "within",
       "type": "word",
       "count": 27
     },
     {
       "text": "far",
-      "type": "word",
-      "count": 26
-    },
-    {
-      "text": "might",
       "type": "word",
       "count": 26
     },
@@ -1299,11 +929,6 @@
       "count": 25
     },
     {
-      "text": "these",
-      "type": "word",
-      "count": 25
-    },
-    {
       "text": "through",
       "type": "word",
       "count": 25
@@ -1315,11 +940,6 @@
     },
     {
       "text": "first",
-      "type": "word",
-      "count": 24
-    },
-    {
-      "text": "here",
       "type": "word",
       "count": 24
     },
@@ -1345,11 +965,6 @@
     },
     {
       "text": "take",
-      "type": "word",
-      "count": 24
-    },
-    {
-      "text": "unto",
       "type": "word",
       "count": 24
     },
@@ -1384,11 +999,6 @@
       "count": 22
     },
     {
-      "text": "thou",
-      "type": "word",
-      "count": 22
-    },
-    {
       "text": "last",
       "type": "word",
       "count": 21
@@ -1400,11 +1010,6 @@
     },
     {
       "text": "man",
-      "type": "word",
-      "count": 21
-    },
-    {
-      "text": "oh",
       "type": "word",
       "count": 21
     },
@@ -1502,11 +1107,6 @@
       "text": "while",
       "type": "word",
       "count": 19
-    },
-    {
-      "text": "am",
-      "type": "word",
-      "count": 18
     },
     {
       "text": "each",
@@ -1654,17 +1254,7 @@
       "count": 16
     },
     {
-      "text": "those",
-      "type": "word",
-      "count": 16
-    },
-    {
       "text": "tree",
-      "type": "word",
-      "count": 16
-    },
-    {
-      "text": "why",
       "type": "word",
       "count": 16
     },
@@ -1680,11 +1270,6 @@
     },
     {
       "text": "because",
-      "type": "word",
-      "count": 15
-    },
-    {
-      "text": "been",
       "type": "word",
       "count": 15
     },
@@ -1720,11 +1305,6 @@
     },
     {
       "text": "hear",
-      "type": "word",
-      "count": 15
-    },
-    {
-      "text": "into",
       "type": "word",
       "count": 15
     },
@@ -1770,11 +1350,6 @@
     },
     {
       "text": "summer's",
-      "type": "word",
-      "count": 15
-    },
-    {
-      "text": "thy",
       "type": "word",
       "count": 15
     },
@@ -1945,11 +1520,6 @@
     },
     {
       "text": "town",
-      "type": "word",
-      "count": 13
-    },
-    {
-      "text": "whom",
       "type": "word",
       "count": 13
     },
@@ -2304,11 +1874,6 @@
       "count": 9
     },
     {
-      "text": "ah",
-      "type": "word",
-      "count": 9
-    },
-    {
       "text": "along",
       "type": "word",
       "count": 9
@@ -2500,11 +2065,6 @@
     },
     {
       "text": "sure",
-      "type": "word",
-      "count": 9
-    },
-    {
-      "text": "thine",
       "type": "word",
       "count": 9
     },
@@ -3184,11 +2744,6 @@
       "count": 6
     },
     {
-      "text": "being",
-      "type": "word",
-      "count": 6
-    },
-    {
       "text": "bell",
       "type": "word",
       "count": 6
@@ -3505,11 +3060,6 @@
     },
     {
       "text": "noticed",
-      "type": "word",
-      "count": 6
-    },
-    {
-      "text": "o",
       "type": "word",
       "count": 6
     },
@@ -3865,11 +3415,6 @@
     },
     {
       "text": "delight",
-      "type": "word",
-      "count": 5
-    },
-    {
-      "text": "does",
       "type": "word",
       "count": 5
     },
@@ -4910,11 +4455,6 @@
     },
     {
       "text": "nought",
-      "type": "word",
-      "count": 4
-    },
-    {
-      "text": "o'er",
       "type": "word",
       "count": 4
     },
@@ -9549,11 +9089,6 @@
       "count": 2
     },
     {
-      "text": "ne'er",
-      "type": "word",
-      "count": 2
-    },
-    {
       "text": "needle",
       "type": "word",
       "count": 2
@@ -11587,16 +11122,6 @@
       "text": "yield",
       "type": "word",
       "count": 2
-    },
-    {
-      "text": "yours",
-      "type": "word",
-      "count": 2
-    },
-    {
-      "text": "'tis",
-      "type": "word",
-      "count": 1
     },
     {
       "text": "abash",
@@ -16125,11 +15650,6 @@
     },
     {
       "text": "dwelling",
-      "type": "word",
-      "count": 1
-    },
-    {
-      "text": "e'er",
       "type": "word",
       "count": 1
     },
@@ -21064,11 +20584,6 @@
       "count": 1
     },
     {
-      "text": "ours",
-      "type": "word",
-      "count": 1
-    },
-    {
       "text": "outgrow",
       "type": "word",
       "count": 1
@@ -25514,11 +25029,6 @@
       "count": 1
     },
     {
-      "text": "theirs",
-      "type": "word",
-      "count": 1
-    },
-    {
       "text": "theme",
       "type": "word",
       "count": 1
@@ -27140,11 +26650,6 @@
     },
     {
       "text": "wrote",
-      "type": "word",
-      "count": 1
-    },
-    {
-      "text": "ye",
       "type": "word",
       "count": 1
     },

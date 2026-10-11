@@ -1,5 +1,5 @@
 {
-  "note": "Defaults for deal.py. Command line flags override these.",
+  "note": "Defaults for deal.py. Command line flags override draw, use and weight. min_lines and max_lines bound the finished poem.",
   "draw": 32,
   "use": 16,
   "weight": "log",
@@ -9,5 +9,7 @@
   ],
   "rotation_epoch": "2026-10-13",
   "min_pair_count": 2,
-  "min_pmi": 3.0
+  "min_pmi": 3.0,
+  "min_lines": 4,
+  "max_lines": 8
 }

@@ -85,6 +85,7 @@ def weighted_sample(rng: random.Random, items: list[dict], n: int, scheme: str) 
 
 def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
               seed: int | None = None) -> dict:
+    settings = load_settings()
     bank = load_bank(poet)
     seed_value = seed if seed is not None else stable_seed(poet, day.isoformat())
     rng = random.Random(seed_value)
@@ -103,6 +104,7 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
         "use": use,
         "fragments": [{"text": p["text"], "type": p["type"]} for p in picks],
         "glue": glue,
+        "lines": [settings.get("min_lines", 4), settings.get("max_lines", 8)],
         "voice": bank.get("voice", ""),
         "source": src,
         "colophon": {
@@ -110,10 +112,13 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
             "source_line": source_line,
         },
         "rules": [
-            f"Use exactly {use} of the {len(picks)} fragments, each at most once.",
+            f"Use exactly {use} distinct fragments of the {len(picks)} dealt.",
+            "One fragment may be used twice, as a refrain, if both uses end a line.",
             "A pair stays together, in order, on one line.",
-            "Each glue word may be spent once. Nothing else may be added.",
-            "Line breaks, capitalization and punctuation are free.",
+            "Free glue is unlimited. Budgeted glue may be spent once each. Nothing else may be added.",
+            f"Between {settings.get('min_lines', 4)} and {settings.get('max_lines', 8)} lines.",
+            "The last word of the poem is a fragment, never glue; make it a noun or a verb.",
+            "Line breaks, capitalization and punctuation are free. No em dashes.",
             "Do not change a word's form: no plurals, tenses or possessives the bank did not deal.",
         ],
     }
@@ -128,7 +133,8 @@ def print_draw(draw: dict, fmt: str) -> None:
     for i, f in enumerate(draw["fragments"], 1):
         tag = "  [pair]" if f["type"] == "pair" else ""
         print(f"  {i:2d}. {f['text']}{tag}")
-    print("glue, once each: " + ", ".join(draw["glue"]))
+    print("free glue: " + ", ".join(draw["glue"]["free"]))
+    print("glue, once each: " + ", ".join(draw["glue"]["once"]))
     if draw.get("voice"):
         print("voice: " + draw["voice"])
     print(draw["colophon"]["assembled_line"])
@@ -148,13 +154,15 @@ def tokenize_poem(text: str) -> list[str | None]:
     return toks
 
 
-def solve(tokens: list[str | None], fragments: list[dict], glue: list[str]):
+def solve(tokens: list, fragments: list[dict], free: set[str], once: list[str], use: int | None = None):
     """Find one assignment of poem tokens to fragments and glue, or None.
 
     Depth-first search over the token stream. The poem is short and the
     draw is small, so this is instant; a search is used instead of a greedy
     scan so a word that is both glue and a dealt fragment never produces a
-    false failure.
+    false failure. State: fragments used, fragments whose first use ended a
+    line (eligible to become the refrain), the refrain fragment if any, and
+    the remaining budgeted glue.
     """
     words = {}
     pairs = {}
@@ -164,58 +172,87 @@ def solve(tokens: list[str | None], fragments: list[dict], glue: list[str]):
             pairs.setdefault(tuple(parts), []).append(idx)
         else:
             words.setdefault(parts[0], []).append(idx)
-    glue_count = Counter(glue)
+    once_count = Counter(once)
+    once_keys = list(once_count.keys())
     n = len(tokens)
     best_fail = {"pos": -1}
     memo: set = set()
 
-    def rec(i: int, used: frozenset, glue_left: tuple, trail: list):
+    def line_final(j: int) -> bool:
+        return j >= n or tokens[j] is None
+
+    def rec(i, used, final_used, refrain, glue_left, trail):
         if i >= n:
-            return trail
-        key = (i, used, glue_left)
+            # With a target count, keep searching until an assignment hits it,
+            # so a word that is both glue and fragment lands on the right side.
+            return trail if use is None or len(used) == use else None
+        key = (i, used, final_used, refrain, glue_left)
         if key in memo:
             return None
         tok = tokens[i]
         if tok is None:
-            return rec(i + 1, used, glue_left, trail)
+            return rec(i + 1, used, final_used, refrain, glue_left, trail)
         nxt = tokens[i + 1] if i + 1 < n else None
+
+        def try_fragment(idx, length, kind):
+            ends_line = line_final(i + length)
+            if idx not in used:
+                fu = final_used | {idx} if ends_line else final_used
+                return rec(i + length, used | {idx}, fu, refrain, glue_left, trail + [(kind, idx)])
+            if refrain is None and idx in final_used and ends_line:
+                return rec(i + length, used, final_used, idx, glue_left, trail + [("refrain", idx)])
+            return None
+
         if nxt is not None:
             for idx in pairs.get((tok, nxt), []):
-                if idx not in used:
-                    r = rec(i + 2, used | {idx}, glue_left, trail + [("pair", idx)])
-                    if r is not None:
-                        return r
-        for idx in words.get(tok, []):
-            if idx not in used:
-                r = rec(i + 1, used | {idx}, glue_left, trail + [("word", idx)])
+                r = try_fragment(idx, 2, "pair")
                 if r is not None:
                     return r
-        gl = dict(zip(glue_count.keys(), glue_left))
-        if gl.get(tok, 0) > 0:
-            new = tuple(gl[k] - (1 if k == tok else 0) for k in glue_count.keys())
-            r = rec(i + 1, used, new, trail + [("glue", tok)])
+        for idx in words.get(tok, []):
+            r = try_fragment(idx, 1, "word")
             if r is not None:
                 return r
+        if tok in free:
+            r = rec(i + 1, used, final_used, refrain, glue_left, trail + [("glue", tok)])
+            if r is not None:
+                return r
+        if tok in once_count:
+            k = once_keys.index(tok)
+            if glue_left[k] > 0:
+                new = tuple(v - (1 if j == k else 0) for j, v in enumerate(glue_left))
+                r = rec(i + 1, used, final_used, refrain, new, trail + [("glue", tok)])
+                if r is not None:
+                    return r
         if i > best_fail["pos"]:
             best_fail["pos"] = i
         memo.add(key)
         return None
 
-    trail = rec(0, frozenset(), tuple(glue_count.values()), [])
+    trail = rec(0, frozenset(), frozenset(), None, tuple(once_count.values()), [])
     return trail, best_fail["pos"]
 
 
-def check(draw: dict, poem: str, use: int | None = None) -> dict:
+def check(draw: dict, poem: str, use: int | None = None, lines: tuple | None = None) -> dict:
     use = use if use is not None else draw["use"]
+    lo, hi = lines if lines is not None else tuple(draw.get("lines", (1, 10_000)))
     tokens = tokenize_poem(poem)
     fragments = draw["fragments"]
-    glue = [g.lower() for g in draw["glue"]]
-    trail, fail_pos = solve(tokens, fragments, glue)
+    glue = draw["glue"]
+    if isinstance(glue, list):  # older draws: everything budgeted once
+        glue = {"free": [], "once": glue}
+    free = {g.lower() for g in glue.get("free", [])}
+    once = [g.lower() for g in glue.get("once", [])]
+    trail, fail_pos = solve(tokens, fragments, free, once, use)
+    count_only = False
+    if trail is None:
+        trail, fail_pos = solve(tokens, fragments, free, once)
+        count_only = trail is not None
 
-    vocab = set(glue)
+    vocab = set(free) | set(once)
     for f in fragments:
         vocab.update(f["text"].split())
     unknown = sorted({t for t in tokens if t is not None and t not in vocab})
+    n_lines = sum(1 for line in poem.splitlines() if tokenize_line(line))
 
     if trail is None:
         at = tokens[fail_pos] if 0 <= fail_pos < len(tokens) else None
@@ -223,21 +260,29 @@ def check(draw: dict, poem: str, use: int | None = None) -> dict:
         if unknown:
             problems.append(f"words not in the draw or glue: {', '.join(unknown)}")
         if at and at not in unknown:
-            problems.append(f"could not account for '{at}': a fragment or glue word used too many times, or a pair broken apart")
+            problems.append(f"could not account for '{at}': a fragment or budgeted glue word used too many times, "
+                            "a pair broken apart, or a second refrain")
         if not problems:
             problems.append("could not match the poem to the draw")
         return {"ok": False, "fragments_used": None, "glue_used": None, "problems": problems}
 
-    frag_idx = [idx for kind, idx in trail if kind != "glue"]
+    frag_idx = [idx for kind, idx in trail if kind in ("word", "pair")]
+    refrain = [fragments[idx]["text"] for kind, idx in trail if kind == "refrain"]
     glue_used = [tok for kind, tok in trail if kind == "glue"]
     problems = []
-    if len(frag_idx) != use:
-        problems.append(f"poem uses {len(frag_idx)} fragments; it must use exactly {use}")
+    if count_only or len(frag_idx) != use:
+        problems.append(f"poem uses {len(frag_idx)} distinct fragments; it must use exactly {use}")
+    if not (lo <= n_lines <= hi):
+        problems.append(f"poem has {n_lines} lines; it must have between {lo} and {hi}")
+    if trail and trail[-1][0] == "glue":
+        problems.append(f"the last word '{trail[-1][1]}' is glue; end on a fragment, a noun or a verb")
     return {
         "ok": not problems,
         "fragments_used": len(frag_idx),
         "fragments": [fragments[i]["text"] for i in frag_idx],
+        "refrain": refrain[0] if refrain else None,
         "glue_used": glue_used,
+        "lines": n_lines,
         "problems": problems,
     }
 
@@ -267,6 +312,7 @@ def main(argv=None) -> int:
     p_check.add_argument("--draw", type=Path, required=True, help="JSON written by draw/today")
     p_check.add_argument("--poem", type=Path, required=True, help="poem text file, or - for stdin")
     p_check.add_argument("--use", type=int, help="override required fragment count")
+    p_check.add_argument("--lines", type=int, nargs=2, metavar=("MIN", "MAX"), help="override the line bounds")
     sub.add_parser("poets", help="list available banks")
 
     args = ap.parse_args(argv)
@@ -290,7 +336,7 @@ def main(argv=None) -> int:
     if args.cmd == "check":
         draw = load_json(args.draw)
         poem = sys.stdin.read() if str(args.poem) == "-" else args.poem.read_text(encoding="utf-8")
-        result = check(draw, poem, args.use)
+        result = check(draw, poem, args.use, tuple(args.lines) if args.lines else None)
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0 if result["ok"] else 1
 

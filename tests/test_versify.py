@@ -204,21 +204,22 @@ class DealTests(unittest.TestCase):
         self.assertEqual(deal.poet_for_date(date(2026, 10, 12), settings), "poe")
 
     def fixed_draw(self):
-        return {"poet": "sample", "use": 4,
+        return {"poet": "sample", "use": 4, "lines": [1, 8],
                 "fragments": [{"text": "pallid bust", "type": "pair"}, {"text": "lantern", "type": "word"},
                               {"text": "frost", "type": "word"}, {"text": "bee", "type": "word"},
                               {"text": "i", "type": "word"}, {"text": "sleeps", "type": "word"}],
-                "glue": ["the", "a", "and", "of", "in", "to", "my", "you", "I", "is"]}
+                "glue": {"free": ["the", "a", "and", "of", "in", "to", "is"], "once": ["my", "you", "I", "not"]}}
 
     def test_check_accepts_a_legal_poem(self):
-        poem = "The pallid bust, a lantern:\nFrost and I.\n"
+        poem = "The pallid bust, the lantern:\nthe frost and the bee.\n"
         r = deal.check(self.fixed_draw(), poem)
         self.assertTrue(r["ok"], r)
         self.assertEqual(r["fragments_used"], 4)
-        self.assertEqual(sorted(r["glue_used"]), ["a", "and", "the"])
+        self.assertEqual(r["glue_used"], ["the", "the", "the", "and", "the"])
+        self.assertIsNone(r["refrain"])
 
     def test_check_resolves_glue_versus_fragment_ambiguity(self):
-        # "i" is both a dealt fragment and a glue word; two uses need one of each.
+        # "i" is both a dealt fragment and a budgeted glue word; two uses need one of each.
         poem = "I, the lantern; I, a frost; my bee."
         r = deal.check(self.fixed_draw(), poem)
         self.assertTrue(r["ok"], r)
@@ -228,10 +229,46 @@ class DealTests(unittest.TestCase):
         self.assertFalse(r["ok"])
         self.assertIn("moon", r["problems"][0])
 
-    def test_check_rejects_glue_reuse(self):
-        r = deal.check(self.fixed_draw(), "The lantern and a frost and my bee and pallid bust")
+    def test_check_rejects_budgeted_glue_reuse(self):
+        r = deal.check(self.fixed_draw(), "My lantern, my frost, the bee, the pallid bust")
         self.assertFalse(r["ok"])
-        self.assertIn("and", r["problems"][0])
+        self.assertIn("my", r["problems"][0])
+
+    def test_free_glue_is_unlimited(self):
+        r = deal.check(self.fixed_draw(), "The lantern and the frost and the bee and the pallid bust")
+        self.assertTrue(r["ok"], r)
+
+    def test_refrain_allowed_once_at_line_ends(self):
+        d = self.fixed_draw()
+        r = deal.check(d, "The lantern\nthe pallid bust\nthe frost, the bee\nthe lantern")
+        self.assertTrue(r["ok"], r)
+        self.assertEqual(r["refrain"], "lantern")
+        self.assertEqual(r["fragments_used"], 4)
+        # refrain mid-line is a reuse, not a refrain
+        r = deal.check(d, "The lantern\nthe pallid bust\nthe lantern frost\nthe bee")
+        self.assertFalse(r["ok"])
+        # two different refrains is one too many
+        r = deal.check(d, "The lantern\nthe frost\nthe lantern\nthe frost\nthe bee, the pallid bust")
+        self.assertFalse(r["ok"])
+
+    def test_last_word_must_be_a_fragment(self):
+        r = deal.check(self.fixed_draw(), "The lantern, the frost, the bee, the pallid bust and the")
+        self.assertFalse(r["ok"])
+        self.assertTrue(any("last word" in p for p in r["problems"]), r)
+
+    def test_glue_or_fragment_choice_respects_the_count(self):
+        # "i" could be a fragment or budgeted glue; only reading it as glue hits exactly 4 fragments.
+        r = deal.check(self.fixed_draw(), "I and the lantern, the frost, the bee, the pallid bust")
+        self.assertTrue(r["ok"], r)
+        self.assertEqual(r["fragments_used"], 4)
+        self.assertIn("i", r["glue_used"])
+
+    def test_line_bounds(self):
+        d = self.fixed_draw(); d["lines"] = [2, 3]
+        self.assertFalse(deal.check(d, "The lantern, the frost, the bee, the pallid bust")["ok"])
+        self.assertTrue(deal.check(d, "The lantern, the frost,\nthe bee, the pallid bust")["ok"])
+        r = deal.check(d, "The lantern\nthe frost\nthe bee\nthe pallid bust")
+        self.assertIn("4 lines", r["problems"][0])
 
     def test_check_rejects_broken_pair(self):
         r = deal.check(self.fixed_draw(), "pallid\nbust lantern frost bee")
@@ -253,7 +290,7 @@ class DealTests(unittest.TestCase):
             draw_path = Path(d) / "draw.json"
             poem_path = Path(d) / "poem.txt"
             draw_path.write_text(json.dumps(self.fixed_draw()))
-            poem_path.write_text("The pallid bust, a lantern:\nFrost and I.\n")
+            poem_path.write_text("The pallid bust, the lantern:\nthe frost and the bee.\n")
             r = subprocess.run([sys.executable, str(ROOT / "scripts" / "deal.py"), "check",
                                 "--draw", str(draw_path), "--poem", str(poem_path)],
                                capture_output=True, text=True, env=env)

@@ -1,4 +1,5 @@
 {
-  "note": "The glue set. Each word may be spent once per poem. Placeholder list, Avalynn to finalize. Repeat a word to allow it twice.",
-  "words": ["the", "a", "and", "of", "in", "to", "my", "you", "I", "is"]
+  "note": "Glue is the only source of words outside the poet's bank. Free glue is unlimited: it carries no meaning. Budgeted glue may be spent once each per poem: these words set a poem's stance. Repeat a budgeted word to allow it twice.",
+  "free": ["the", "a", "an", "and", "of", "to", "in", "is", "are", "was", "were"],
+  "once": ["I", "you", "my", "not", "but"]
 }

@@ -173,7 +173,11 @@ notifications on. The SKILL.md has a section on running unattended.
 must contain (16), `weight`, `rotation` and `rotation_epoch` (the date on
 which the first poet in the rotation is up), and the pair thresholds.
 
-`data/glue-words.json`: the glue set. List a word twice to allow it twice.
+`data/glue-words.json`: the glue set. `free` words (articles and the
+smallest connectives) are unlimited. `once` words (pronouns, not, but)
+may be spent once each; list one twice to allow it twice. `min_lines`
+and `max_lines` in settings bound the poem. One fragment may repeat as
+a refrain when both uses end a line.
 
 ## Style rule
 

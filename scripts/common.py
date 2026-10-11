@@ -83,8 +83,13 @@ def load_settings() -> dict:
     return load_json(DATA / "settings.json")
 
 
-def load_glue() -> list[str]:
-    return [w.lower() for w in load_json(DATA / "glue-words.json")["words"]]
+def load_glue() -> dict:
+    """The glue set: {"free": [...unlimited...], "once": [...one use each...]}."""
+    g = load_json(DATA / "glue-words.json")
+    if "words" in g and "free" not in g:  # older single-list format
+        return {"free": [], "once": [w.lower() for w in g["words"]]}
+    return {"free": [w.lower() for w in g.get("free", [])],
+            "once": [w.lower() for w in g.get("once", [])]}
 
 
 def load_function_words() -> set[str]:
