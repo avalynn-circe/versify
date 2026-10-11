@@ -163,9 +163,19 @@ fragments. Claude runs it before presenting a poem.
 ## Daily delivery
 
 The skill does not fire on its own. For a poem every morning, create a
-Routine in claude.ai that runs daily, checks out this repository, and sends
-the prompt "Run Versify for today and deliver the poem", with push or email
-notifications on. The SKILL.md has a section on running unattended.
+Routine at https://claude.ai/code/routines with this repository selected
+as its repository, a daily schedule, push or email notifications, and a
+prompt such as:
+
+    Run Versify for today. Read SKILL.md in this repository and follow it
+    exactly: deal with scripts/deal.py, compose, verify with the checker,
+    and make your final message only the poem and its two colophon lines.
+    Nobody is watching; do not ask questions. If anything fails, make the
+    final message one sentence saying what failed.
+
+The repository must be attached to the Routine as a repository. A Routine
+that only clones the repository from its prompt runs the scripts as
+untrusted code and the automatic permission check can refuse them.
 
 ## Settings
 

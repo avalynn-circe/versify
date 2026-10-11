@@ -18,15 +18,14 @@ poet per day, so the same day always yields the same draw.
 
 ## Steps
 
-1. **Deal.** Run the dealer as one plain command, with no `cd`, no shell
-   redirection and no chained commands (automated permission checks are
-   happier with a single bare command):
+1. **Deal.** From the repository root, run the dealer as one plain
+   command (no redirection or chaining; `--out` writes the file):
 
    ```bash
-   python3 /home/user/versify/scripts/deal.py today --format json --out /tmp/versify-draw.json
+   python3 scripts/deal.py today --format json --out /tmp/versify-draw.json
    ```
 
-   Adjust the path if the skill lives elsewhere. Use `draw --poet poe` (or
+   Use `draw --poet poe` (or
    `dickinson`) instead of `today` only when the user names a poet. Add
    `--date YYYY-MM-DD` to replay another day's draw. Read the printed JSON:
    `fragments` (each with `text` and `type`), `glue` (`free` and `once`),
@@ -122,7 +121,7 @@ poet per day, so the same day always yields the same draw.
    bare command:
 
    ```bash
-   python3 /home/user/versify/scripts/deal.py check --draw /tmp/versify-draw.json --poem /tmp/versify-poem.txt
+   python3 scripts/deal.py check --draw /tmp/versify-draw.json --poem /tmp/versify-poem.txt
    ```
 
    It exits 0 and prints `"ok": true` when the poem is legal. If it fails
