@@ -95,6 +95,9 @@ def clean(lines: list[str], start: str | None, end: str | None,
         s = line.rstrip()
         for rx, repl in sub_res:
             s = rx.sub(repl, s)
+        # Em and en dashes become Gutenberg's own "--": the tokenizer treats both
+        # as separators, and the repository's no-em-dash rule covers these files.
+        s = s.replace("\u2014", "--").replace("\u2013", "--")
         if active_end is not None:
             if active_end.search(s):
                 active_end = None  # the END line itself is processed normally below

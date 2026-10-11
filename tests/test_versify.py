@@ -74,6 +74,10 @@ class IngestTests(unittest.TestCase):
         self.assertEqual(stats["bracket"], 2)
         self.assertGreaterEqual(stats["cut"], 5)
 
+    def test_dashes_normalize_to_double_hyphen(self):
+        out, _ = ingest.clean(["Was standing near me in the gloom\u2014", "a word\u2013another"], None, None, [])
+        self.assertEqual(out, ["Was standing near me in the gloom--", "a word--another"])
+
     def test_sub_unwraps_music_blocks(self):
         lines = ["[Illustration: a crocodile]", "[Music:", "    How doth the little crocodile", "    Improve his shining tail!]", "[Illustration]"]
         out, _ = ingest.clean(lines, None, None, [], subs=[(r"^\[Music:\s*$", ""), (r"^(?!\[)(.*)\]\s*$", r"\1")])
