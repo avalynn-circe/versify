@@ -1,10 +1,14 @@
 {
-  "note": "Defaults for deal.py. Command line flags override draw, use and weight. min_lines and max_lines bound the finished poem.",
+  "note": "Defaults for deal.py. Flags override draw, use and weight. rotation lists poet ids in daily order; leave it empty to rotate through the whole library in shelf order.",
   "draw": 32,
   "use": 16,
   "weight": "log",
   "rotation": [
     "dickinson",
+    "whitman",
+    "rossetti",
+    "hopkins",
+    "carroll",
     "poe"
   ],
   "rotation_epoch": "2026-10-13",

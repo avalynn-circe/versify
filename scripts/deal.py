@@ -30,12 +30,16 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import (POETS, load_glue, load_json, load_settings,  # noqa: E402
+from common import (LIBRARY, load_glue, load_json, load_settings,  # noqa: E402
                     stable_seed, tokenize_line)
 
 
 def list_banks() -> dict[str, Path]:
-    return {p.stem: p for p in sorted(POETS.glob("*.json")) if not p.name.endswith(".meta.json")}
+    """Every library/<id>/bank.json, in shelf order."""
+    if not LIBRARY.exists():
+        return {}
+    return {d.name: d / "bank.json" for d in sorted(LIBRARY.iterdir())
+            if d.is_dir() and (d / "bank.json").exists()}
 
 
 def load_bank(poet: str) -> dict:
@@ -47,7 +51,10 @@ def load_bank(poet: str) -> dict:
 
 
 def poet_for_date(day: date, settings: dict) -> str:
-    rotation = settings["rotation"]
+    """Rotate through settings.rotation, or through the whole shelf if it is empty."""
+    rotation = settings.get("rotation") or list(list_banks())
+    if not rotation:
+        raise SystemExit("no banks in the library")
     epoch = date.fromisoformat(settings["rotation_epoch"])
     return rotation[(day - epoch).days % len(rotation)]
 
@@ -91,9 +98,11 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
     rng = random.Random(seed_value)
     picks = weighted_sample(rng, bank["fragments"], n, scheme)
     glue = load_glue()
-    src = bank.get("source", {})
-    gid = src.get("gutenberg_id")
-    source_line = f"Source: {src.get('title', '?')} (Project Gutenberg" + (f" {gid})." if gid else ").")
+    srcs = bank.get("sources") or [bank.get("source", {})]
+    src = srcs[0]
+    titles = "; ".join(str(x.get("title", "?")) for x in srcs)
+    gids = ", ".join(str(x["gutenberg_id"]) for x in srcs if x.get("gutenberg_id"))
+    source_line = f"Source: {titles} (Project Gutenberg" + (f" {gids})." if gids else ").")
     pretty_date = f"{day.day} {day.strftime('%B %Y')}"
     return {
         "poet": bank["id"],

@@ -1,6 +1,6 @@
 {
   "poet": "dickinson",
-  "clean_text": "sources/clean/dickinson.txt",
+  "clean_text": "library/dickinson/clean.txt",
   "generated": "2026-10-11",
   "min_pair_count": 2,
   "min_pmi": 3.0,

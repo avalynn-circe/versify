@@ -1,6 +1,6 @@
-# Raw Gutenberg downloads stay out of the repo. The cleaned verse in sources/clean is committed
-# so review.py and propose.py work from a fresh clone.
-sources/raw/
+# Raw Gutenberg downloads stay out of the repo. Each poet's cleaned verse is committed in
+# library/<poet>/clean.txt so review.py and propose.py work from a fresh clone.
+sources/
 __pycache__/
 *.pyc
 *.skill

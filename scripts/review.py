@@ -6,7 +6,7 @@
 
 Standard library only. The page talks to this process over three tiny
 endpoints, so every approve, reject, split or merge is written to
-review/<poet>.json straight away. Close the tab whenever you like.
+library/<poet>/review.json straight away. Close the tab whenever you like.
 """
 
 import argparse
@@ -20,7 +20,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import (REVIEW, ROOT, load_json, read_lines, save_json,  # noqa: E402
+from common import (ROOT, load_json, poet_dir, read_lines, save_json,  # noqa: E402
                     tokenize_line)
 
 HTML = Path(__file__).resolve().parent / "review.html"
@@ -29,7 +29,7 @@ HTML = Path(__file__).resolve().parent / "review.html"
 class State:
     def __init__(self, poet: str):
         self.poet = poet
-        self.path = REVIEW / f"{poet}.json"
+        self.path = poet_dir(poet) / "review.json"
         if not self.path.exists():
             raise SystemExit(f"no review file at {self.path}; run propose.py first")
         self.review = load_json(self.path)

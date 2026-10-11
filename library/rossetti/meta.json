@@ -1,0 +1,15 @@
+{
+  "id": "rossetti",
+  "name": "Christina Rossetti",
+  "color": "#8c4a5b",
+  "reviewed": false,
+  "source": {
+    "title": "Poems",
+    "editors": "",
+    "edition": "Author's edition, revised and enlarged (1876), Little, Brown and Company, Boston, 1906 printing: Goblin Market, The Prince's Progress, A Pageant and other poems, and the devotional pieces. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/19188",
+    "gutenberg_id": 19188,
+    "note": "Ingest starts at the first poem title, cuts one prose author's note, and ends at the transcriber's note."
+  },
+  "voice": "Plain words, strange turns. Short lines that rhyme in the ear even when they do not on the page. Love, death and renunciation handled as quietly as weather. A question can close a stanza. A small concrete thing, a door, a wall, a piece of fruit, carries the feeling; the feeling is never named outright."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "carroll",
+  "name": "Lewis Carroll",
+  "color": "#b0742a",
+  "reviewed": false,
+  "sources": [
+    {
+      "title": "Phantasmagoria and Other Poems",
+      "edition": "Macmillan, 1911 printing of the 1869 collection. Public domain.",
+      "url": "https://www.gutenberg.org/ebooks/651",
+      "gutenberg_id": 651
+    },
+    {
+      "title": "The Hunting of the Snark",
+      "edition": "Project Gutenberg Millennium Fulcrum edition of the 1876 poem. Public domain.",
+      "url": "https://www.gutenberg.org/ebooks/13",
+      "gutenberg_id": 13
+    },
+    {
+      "title": "Songs from Alice in Wonderland and Through the Looking-Glass",
+      "edition": "Words by Lewis Carroll, A. and C. Black, 1921; the verse only, music and illustrations dropped. Public domain.",
+      "url": "https://www.gutenberg.org/ebooks/36308",
+      "gutenberg_id": 36308
+    }
+  ],
+  "voice": "Nonsense with perfect grammar. The sense comes from syntax and sound, not meaning: portmanteau words, confident absurd logic, a narrator who explains too much. Keep the meter bouncy and the tone deadpan. A rule stated with great seriousness is funnier than a joke. End on a punchline or a sudden verdict."
+}

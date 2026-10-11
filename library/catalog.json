@@ -1,0 +1,79 @@
+{
+  "generated": "2026-10-11",
+  "poets": [
+    {
+      "id": "carroll",
+      "name": "Lewis Carroll",
+      "color": "#b0742a",
+      "words": 3815,
+      "pairs": 150,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "Phantasmagoria and Other Poems",
+        "The Hunting of the Snark",
+        "Songs from Alice in Wonderland and Through the Looking-Glass"
+      ]
+    },
+    {
+      "id": "dickinson",
+      "name": "Emily Dickinson",
+      "color": "#6b4e8f",
+      "words": 5221,
+      "pairs": 121,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "Poems by Emily Dickinson, Three Series, Complete"
+      ]
+    },
+    {
+      "id": "hopkins",
+      "name": "Gerard Manley Hopkins",
+      "color": "#2f5f7a",
+      "words": 3780,
+      "pairs": 64,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "Poems of Gerard Manley Hopkins"
+      ]
+    },
+    {
+      "id": "poe",
+      "name": "Edgar Allan Poe",
+      "color": "#2e2a3b",
+      "words": 3145,
+      "pairs": 164,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "The Complete Poetical Works of Edgar Allan Poe"
+      ]
+    },
+    {
+      "id": "rossetti",
+      "name": "Christina Rossetti",
+      "color": "#8c4a5b",
+      "words": 7280,
+      "pairs": 735,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "Poems"
+      ]
+    },
+    {
+      "id": "whitman",
+      "name": "Walt Whitman",
+      "color": "#3b6e3b",
+      "words": 13045,
+      "pairs": 1115,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "Leaves of Grass"
+      ]
+    }
+  ]
+}

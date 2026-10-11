@@ -4,7 +4,7 @@
     python scripts/propose.py poe
     python scripts/propose.py poe --clean sources/clean/poe.txt --min-pair-count 2
 
-Writes review/<poet>.json. If that file already exists, every decision in it
+Writes library/<poet>/review.json. If that file already exists, every decision in it
 is preserved: statuses carry over, manual merges survive, counts refresh,
 and candidates that vanished from the source are flagged stale rather than
 deleted. Re-running is always safe.
@@ -26,8 +26,8 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import (REVIEW, SOURCES, item_key, load_function_words,  # noqa: E402
-                    load_json, load_settings, read_lines, relative_to_root,
+from common import (item_key, load_function_words, load_json,  # noqa: E402
+                    load_settings, poet_dir, read_lines, relative_to_root,
                     save_json, tokenize_line)
 
 
@@ -104,14 +104,14 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("poet", help="poet id, e.g. dickinson")
-    ap.add_argument("--clean", type=Path, help="cleaned text (default sources/clean/<poet>.txt)")
-    ap.add_argument("--out", type=Path, help="review file (default review/<poet>.json)")
+    ap.add_argument("--clean", type=Path, help="cleaned text (default library/<poet>/clean.txt)")
+    ap.add_argument("--out", type=Path, help="review file (default library/<poet>/review.json)")
     ap.add_argument("--min-pair-count", type=int, default=settings.get("min_pair_count", 2))
     ap.add_argument("--min-pmi", type=float, default=settings.get("min_pmi", 3.0))
     args = ap.parse_args(argv)
 
-    clean_path = args.clean or SOURCES / "clean" / f"{args.poet}.txt"
-    out_path = args.out or REVIEW / f"{args.poet}.json"
+    clean_path = args.clean or poet_dir(args.poet) / "clean.txt"
+    out_path = args.out or poet_dir(args.poet) / "review.json"
     if not clean_path.exists():
         print(f"no cleaned text at {clean_path}; run ingest.py first", file=sys.stderr)
         return 2

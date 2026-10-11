@@ -8,13 +8,18 @@ deal.py check (which verifies a finished poem) can never disagree.
 import hashlib
 import json
 import re
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-POETS = DATA / "poets"
-REVIEW = ROOT / "review"
+LIBRARY = ROOT / "library"
 SOURCES = ROOT / "sources"
+
+
+def poet_dir(poet: str) -> Path:
+    """Every poet lives in library/<id>/ with meta.json, clean.txt, review.json, bank.json."""
+    return LIBRARY / poet
 
 # Contractions that genuinely begin with an apostrophe in older verse.
 # Any other leading apostrophe is a quotation mark and gets stripped.
@@ -28,7 +33,9 @@ _TOKEN_RE = re.compile(r"'?[a-z]+(?:['\-][a-z]+)*")
 
 def normalize_line(line: str) -> str:
     """Lowercase and turn every kind of dash and italics marker into a space."""
-    s = line.lower()
+    # Fold accents (Hopkins's "Rankèd" becomes "ranked") and odd Unicode forms.
+    s = unicodedata.normalize("NFKD", line)
+    s = "".join(c for c in s if not unicodedata.combining(c)).lower()
     s = s.replace("\u2019", "'").replace("\u2018", "'")
     s = s.replace("--", " ").replace("\u2014", " ").replace("\u2013", " ")
     s = s.replace("_", " ")

@@ -1,0 +1,15 @@
+{
+  "id": "whitman",
+  "name": "Walt Whitman",
+  "color": "#3b6e3b",
+  "reviewed": false,
+  "source": {
+    "title": "Leaves of Grass",
+    "editors": "",
+    "edition": "Project Gutenberg edition, the final (1891-92) arrangement. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/1322",
+    "gutenberg_id": 1322,
+    "note": "Titles are unindented mixed-case lines and verse is indented, so ingest drops every unindented line."
+  },
+  "voice": "Expansive and spoken. Long lines that gather and list: bodies, trades, grass, roads, the sea. The first person is generous rather than confessional; his I stands for anyone. Let a line run on with commas, and end on a plain declarative. Catalogs are his music, so three nouns in a row is a Whitman line, not a list to avoid."
+}

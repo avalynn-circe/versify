@@ -1,6 +1,6 @@
 {
   "poet": "poe",
-  "clean_text": "sources/clean/poe.txt",
+  "clean_text": "library/poe/clean.txt",
   "generated": "2026-10-11",
   "min_pair_count": 2,
   "min_pmi": 3.0,

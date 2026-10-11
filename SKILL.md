@@ -163,8 +163,9 @@ borrowing allowed, and the poem must be new.
 ## Files
 
 - `scripts/deal.py` deals, lists poets, and checks poems. Run it with `-h`.
-- `data/poets/<poet>.json` are the word banks. `data/glue-words.json` is
-  the glue set. `data/settings.json` holds the draw size, the required
-  fragment count and the poet rotation.
+- `library/<poet>/bank.json` are the word banks and `library/catalog.json`
+  lists the shelf. `data/glue-words.json` is the glue set.
+  `data/settings.json` holds the draw size, the required fragment count,
+  the line bounds and the poet rotation.
 - `README.md` explains how a bank is built and how to add a poet. Only
   read it if the user asks about the pipeline.

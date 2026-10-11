@@ -1,0 +1,15 @@
+{
+  "id": "hopkins",
+  "name": "Gerard Manley Hopkins",
+  "color": "#2f5f7a",
+  "reviewed": false,
+  "source": {
+    "title": "Poems of Gerard Manley Hopkins",
+    "editors": "Robert Bridges",
+    "edition": "First edition, Humphrey Milford, London, 1918. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/22403",
+    "gutenberg_id": 22403,
+    "note": "Ingest starts at the Early Poems heading (dropping Bridges's dedicatory sonnet and the author's prose preface on rhythm) and ends at the editor's notes. Accented letters are folded to plain ones by the tokenizer."
+  },
+  "voice": "Dense, stressed, sprung. Compound words and alliteration are the engine: let stresses pile up and consonants knock. Praise is his mode, usually of something ordinary looked at hard, a falcon, a stream, a plough, a bluebell. Lines may run long but every word pulls its weight. One exclamation is allowed; make it earn its place."
+}

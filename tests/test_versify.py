@@ -27,6 +27,9 @@ class TokenizerTests(unittest.TestCase):
         toks = common.tokenize_line("O'er the _pallid_--bust, 'tis to-day; “I” said")
         self.assertEqual(toks, ["o'er", "the", "pallid", "bust", "'tis", "to-day", "i", "said"])
 
+    def test_accents_fold_to_plain_letters(self):
+        self.assertEqual(common.tokenize_line("Rank\u00e8d round the bower, \u00d3ne"), ["ranked", "round", "the", "bower", "one"])
+
     def test_strips_quotation_apostrophes_and_stray_letters(self):
         self.assertEqual(common.tokenize_line("'quoted' x a b"), ["quoted", "a"])
 
@@ -70,6 +73,11 @@ class IngestTests(unittest.TestCase):
         self.assertEqual(stats["symbols"], 1)
         self.assertEqual(stats["bracket"], 2)
         self.assertGreaterEqual(stats["cut"], 5)
+
+    def test_sub_unwraps_music_blocks(self):
+        lines = ["[Illustration: a crocodile]", "[Music:", "    How doth the little crocodile", "    Improve his shining tail!]", "[Illustration]"]
+        out, _ = ingest.clean(lines, None, None, [], subs=[(r"^\[Music:\s*$", ""), (r"^(?!\[)(.*)\]\s*$", r"\1")])
+        self.assertEqual(out, ["How doth the little crocodile", "Improve his shining tail!"])
 
 
 class ProposeTests(unittest.TestCase):
@@ -139,6 +147,17 @@ class BuildBankTests(unittest.TestCase):
         self.assertEqual(texts, {"lantern", "pallid bust"})
         self.assertEqual(bank["counts"], {"words": 1, "pairs": 1})
         self.assertEqual(bank["source"]["url"], "u")
+        self.assertEqual(bank["sources"], [meta["source"]])
+        self.assertFalse(bank["reviewed"])
+
+    def test_multiple_sources(self):
+        review = {"items": [{"fragment": "lantern", "type": "word", "count": 3, "status": "approved"}]}
+        meta = {"id": "s", "name": "N", "color": "#000", "reviewed": True,
+                "sources": [{"title": "A", "edition": "e", "url": "u", "gutenberg_id": 1},
+                            {"title": "B", "edition": "e", "url": "u2", "gutenberg_id": 2}]}
+        bank = build_bank.build(review, meta)
+        self.assertEqual([s["title"] for s in bank["sources"]], ["A", "B"])
+        self.assertTrue(bank["reviewed"])
 
     def test_rejects_missing_meta(self):
         with self.assertRaises(ValueError):
@@ -152,7 +171,8 @@ class DealTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
-        cls.poets = Path(cls.tmp.name)
+        cls.poets = Path(cls.tmp.name) / "sample"
+        cls.poets.mkdir()
         lines, _ = ingest.clean(common.read_lines(FIXTURE), None, None, [])
         items = propose.propose(lines, common.load_function_words(), 2, 3.0)
         for it in items:
@@ -161,15 +181,23 @@ class DealTests(unittest.TestCase):
         meta = {"id": "sample", "name": "Nobody", "color": "#000", "voice": "Plain.",
                 "source": {"title": "Sample Verses", "edition": "e", "url": "u", "gutenberg_id": 99}}
         cls.bank = build_bank.build({"items": items}, meta)
-        common.save_json(cls.poets / "sample.json", cls.bank)
-        common.save_json(cls.poets / "sample.meta.json", meta)
-        cls._orig = deal.POETS
-        deal.POETS = cls.poets
+        common.save_json(cls.poets / "bank.json", cls.bank)
+        common.save_json(cls.poets / "meta.json", meta)
+        cls._orig = deal.LIBRARY
+        deal.LIBRARY = cls.poets.parent
 
     @classmethod
     def tearDownClass(cls):
-        deal.POETS = cls._orig
+        deal.LIBRARY = cls._orig
         cls.tmp.cleanup()
+
+    def test_library_listing_and_catalog(self):
+        self.assertEqual(list(deal.list_banks()), ["sample"])
+        cat = build_bank.write_catalog(self.poets.parent)
+        self.assertEqual(cat["poets"][0]["id"], "sample")
+        self.assertEqual(cat["poets"][0]["words"], self.bank["counts"]["words"])
+        settings = {"rotation": [], "rotation_epoch": "2026-10-13"}
+        self.assertEqual(deal.poet_for_date(date(2026, 10, 14), settings), "sample")
 
     def draw(self, n=12, use=6, **kw):
         return deal.make_draw("sample", date(2026, 10, 13), n, use, "log", **kw)
