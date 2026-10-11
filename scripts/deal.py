@@ -302,6 +302,7 @@ def main(argv=None) -> int:
         p.add_argument("--date", help="YYYY-MM-DD (default today)")
         p.add_argument("--seed", type=int, help="override the date seed")
         p.add_argument("--format", default="json", choices=["json", "text"])
+        p.add_argument("--out", type=Path, help="also write the draw as JSON to this file")
 
     p_today = sub.add_parser("today", help="today's poet by rotation, and the draw")
     add_draw_args(p_today)
@@ -330,6 +331,9 @@ def main(argv=None) -> int:
         day = date.fromisoformat(args.date) if args.date else date.today()
         poet = args.poet if args.cmd == "draw" else poet_for_date(day, settings)
         draw = make_draw(poet, day, args.n, args.use, args.weight, args.seed)
+        if args.out:
+            args.out.parent.mkdir(parents=True, exist_ok=True)
+            args.out.write_text(json.dumps(draw, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print_draw(draw, args.format)
         return 0
 

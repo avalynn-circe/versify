@@ -18,16 +18,20 @@ poet per day, so the same day always yields the same draw.
 
 ## Steps
 
-1. **Deal.** From the skill directory run:
+1. **Deal.** Run the dealer as one plain command, with no `cd`, no shell
+   redirection and no chained commands (automated permission checks are
+   happier with a single bare command):
 
    ```bash
-   python scripts/deal.py today --format json > /tmp/versify-draw.json
+   python3 /home/user/versify/scripts/deal.py today --format json --out /tmp/versify-draw.json
    ```
 
-   Use `draw --poet poe` (or `dickinson`) instead of `today` only when the
-   user names a poet. Add `--date YYYY-MM-DD` to replay another day's draw.
-   Read the JSON: `fragments` (each with `text` and `type`), `glue`, `use`
-   (how many fragments the poem must contain, normally 16), and `rules`.
+   Adjust the path if the skill lives elsewhere. Use `draw --poet poe` (or
+   `dickinson`) instead of `today` only when the user names a poet. Add
+   `--date YYYY-MM-DD` to replay another day's draw. Read the printed JSON:
+   `fragments` (each with `text` and `type`), `glue` (`free` and `once`),
+   `use` (how many distinct fragments the poem must contain, normally 16),
+   `lines`, `voice`, `rules` and `colophon`.
 
 2. **Compose.** Write a poem using exactly `use` of the dealt fragments.
    The hard rules, which the checker enforces:
@@ -113,10 +117,12 @@ poet per day, so the same day always yields the same draw.
    Good-by.
    ```
 
-3. **Verify.** Save the poem to a file and run the checker:
+3. **Verify.** Save the poem to `/tmp/versify-poem.txt` with your file
+   writing tool (not a shell heredoc), then run the checker, again as one
+   bare command:
 
    ```bash
-   python scripts/deal.py check --draw /tmp/versify-draw.json --poem /tmp/versify-poem.txt
+   python3 /home/user/versify/scripts/deal.py check --draw /tmp/versify-draw.json --poem /tmp/versify-poem.txt
    ```
 
    It exits 0 and prints `"ok": true` when the poem is legal. If it fails
