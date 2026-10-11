@@ -68,7 +68,7 @@ poet per day, so the same day always yields the same draw.
    i. **Revise once.** After the checker passes, read the poem aloud. Cut
       the weakest line, rebuild to the required count, and check again.
 
-   Two arrangements of the same Dickinson draw, which held, among others:
+   Two arrangements of one past Dickinson draw, which held, among others:
    mists, morns, scarlet, auburn, breezes, cold, water, heads, row, year's,
    electricity, ceded, firmaments, taste, good-by, shame, subterfuge,
    ballot, docile, supple, and the pair "slow slow".
@@ -86,7 +86,9 @@ poet per day, so the same day always yields the same draw.
    ```
 
    A poem (one image, autumn dawn; plain grammar; the pair used whole; a
-   short concrete ending):
+   short concrete ending). It is an illustration of the method, not a
+   template: never reuse its lines or its shape, even on a day that deals
+   some of the same words:
 
    ```
    Scarlet morns,
