@@ -90,6 +90,10 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
     rng = random.Random(seed_value)
     picks = weighted_sample(rng, bank["fragments"], n, scheme)
     glue = load_glue()
+    src = bank.get("source", {})
+    gid = src.get("gutenberg_id")
+    source_line = f"Source: {src.get('title', '?')} (Project Gutenberg" + (f" {gid})." if gid else ").")
+    pretty_date = f"{day.day} {day.strftime('%B %Y')}"
     return {
         "poet": bank["id"],
         "poet_name": bank["name"],
@@ -99,6 +103,12 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
         "use": use,
         "fragments": [{"text": p["text"], "type": p["type"]} for p in picks],
         "glue": glue,
+        "voice": bank.get("voice", ""),
+        "source": src,
+        "colophon": {
+            "assembled_line": f"Assembled from the words of {bank['name']}, {pretty_date}.",
+            "source_line": source_line,
+        },
         "rules": [
             f"Use exactly {use} of the {len(picks)} fragments, each at most once.",
             "A pair stays together, in order, on one line.",
@@ -119,6 +129,10 @@ def print_draw(draw: dict, fmt: str) -> None:
         tag = "  [pair]" if f["type"] == "pair" else ""
         print(f"  {i:2d}. {f['text']}{tag}")
     print("glue, once each: " + ", ".join(draw["glue"]))
+    if draw.get("voice"):
+        print("voice: " + draw["voice"])
+    print(draw["colophon"]["assembled_line"])
+    print(draw["colophon"]["source_line"])
 
 
 # ---------------------------------------------------------------- check ----

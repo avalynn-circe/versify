@@ -158,8 +158,8 @@ class DealTests(unittest.TestCase):
         for it in items:
             if it["status"] == "pending":
                 it["status"] = "approved" if it["type"] == "pair" else "rejected"
-        meta = {"id": "sample", "name": "Nobody", "color": "#000",
-                "source": {"title": "t", "edition": "e", "url": "u"}}
+        meta = {"id": "sample", "name": "Nobody", "color": "#000", "voice": "Plain.",
+                "source": {"title": "Sample Verses", "edition": "e", "url": "u", "gutenberg_id": 99}}
         cls.bank = build_bank.build({"items": items}, meta)
         common.save_json(cls.poets / "sample.json", cls.bank)
         common.save_json(cls.poets / "sample.meta.json", meta)
@@ -188,6 +188,13 @@ class DealTests(unittest.TestCase):
         for f in self.draw(n=500, use=6)["fragments"]:
             self.assertIn(f["text"], approved)
         self.assertEqual(len(self.draw(n=500, use=6)["fragments"]), len(approved))
+
+    def test_draw_carries_voice_source_and_colophon(self):
+        d = self.draw()
+        self.assertEqual(d["voice"], "Plain.")
+        self.assertEqual(d["source"]["url"], "u")
+        self.assertEqual(d["colophon"]["assembled_line"], "Assembled from the words of Nobody, 13 October 2026.")
+        self.assertEqual(d["colophon"]["source_line"], "Source: Sample Verses (Project Gutenberg 99).")
 
     def test_rotation(self):
         settings = {"rotation": ["dickinson", "poe"], "rotation_epoch": "2026-10-13"}

@@ -1,9 +1,12 @@
 {
   "note": "Defaults for deal.py. Command line flags override these.",
-  "draw": 24,
+  "draw": 32,
   "use": 16,
   "weight": "log",
-  "rotation": ["dickinson", "poe"],
+  "rotation": [
+    "dickinson",
+    "poe"
+  ],
   "rotation_epoch": "2026-10-13",
   "min_pair_count": 2,
   "min_pmi": 3.0

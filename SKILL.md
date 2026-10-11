@@ -30,19 +30,74 @@ poet per day, so the same day always yields the same draw.
    (how many fragments the poem must contain, normally 16), and `rules`.
 
 2. **Compose.** Write a poem using exactly `use` of the dealt fragments.
-   The rules, in full:
+   The hard rules, which the checker enforces:
    - Each fragment at most once. A `pair` fragment stays together, in
      order, on one line. It counts as one fragment.
    - Each glue word may be spent once. You need not spend any.
    - Nothing else. No word outside the draw and the glue, and no change
      of form: if the bank dealt "soul" you may not write "souls".
-   - Line breaks, capitalization and punctuation are free. Use them.
-   - No title. The poet and date are the only heading.
+   - Line breaks, capitalization and punctuation are free. No em dashes,
+     even for Dickinson; a line break or a comma does that work.
+   - No title. The colophon after the poem is the only heading.
 
-   Take the draw seriously as material rather than as an obstacle. Read
-   the fragments a few times before writing. Pairs are often the spine of
-   the poem; the oddest single word is often the ending. Short lines are
-   fine. Fragments can be stretched across many lines or packed tightly.
+   How to arrange the words. These are what separate a poem from a pile
+   of interesting words, so follow them in order:
+
+   a. **Find the poem before writing it.** Read the whole draw twice. Pick
+      the two or three fragments that make one image together. That image
+      is the subject, and every line serves it. Half the draw is meant to
+      be left out; choosing what to leave out is most of the craft.
+   b. **Count the verbs.** The draw usually holds only a few. Plan each
+      line around one. A line with no verb is a list; allow at most one
+      such line, as the opening or the close.
+   c. **Plain grammar.** Every line must read as English a stranger could
+      paraphrase. If you cannot say in prose what a line means, it is
+      word salad: cut it or rebuild it. Glue exists to make grammar, not
+      to fill space. Do not invert word order to sound antique.
+   d. **One gesture per line,** two to six words. Each line adds one
+      image, one turn, or one claim. Do not stack three adjectives.
+   e. **Use the pairs.** They are phrases the poet actually wrote, and
+      they usually carry the poem's music.
+   f. **Build toward the ending.** The last line is the shortest and the
+      most concrete. End on a thing or an act, never on an abstraction.
+   g. **Read the voice note** in the draw and lean into it. It describes
+      how this poet's lines move.
+   h. **Do not use a rare word because it was dealt.** Use it because the
+      poem needs it. "Subterfuge" and "acknowledgment" are in the bank;
+      most days they should stay there.
+   i. **Revise once.** After the checker passes, read the poem aloud. Cut
+      the weakest line, rebuild to the required count, and check again.
+
+   Two arrangements of the same Dickinson draw, which held, among others:
+   mists, morns, scarlet, auburn, breezes, cold, water, heads, row, year's,
+   electricity, ceded, firmaments, taste, good-by, shame, subterfuge,
+   ballot, docile, supple, and the pair "slow slow".
+
+   Word salad (rare words for their own sake, no subject, the fourth line
+   cannot be paraphrased):
+
+   ```
+   Mists, docile;
+   morns a supple scarlet.
+   I stole the year's electricity
+   and ceded my shame to battles.
+   Auburn heads in row:
+   taste good-by.
+   ```
+
+   A poem (one image, autumn dawn; plain grammar; the pair used whole; a
+   short concrete ending):
+
+   ```
+   Scarlet morns,
+   auburn mists,
+   breezes slow, slow.
+   The year's electricity
+   is ceded to firmaments.
+   Cold water,
+   heads in a row.
+   I taste good-by.
+   ```
 
 3. **Verify.** Save the poem to a file and run the checker:
 
@@ -61,17 +116,15 @@ poet per day, so the same day always yields the same draw.
    ```
    <poem, as written>
 
-   Emily Dickinson, 14 October 2026
-   sixteen of her words, glued with: the, a, of
+   Assembled from the words of Emily Dickinson, 14 October 2026.
+   Source: Poems by Emily Dickinson, Three Series, Complete (Project Gutenberg 12242).
    ```
 
-   The second line names the poet and the date from the draw. The third
-   lists the glue actually spent, in the order used, or reads
-   "no glue" if none was. Use "her words" for Dickinson, "his words" for
-   Poe, and "their words" for any poet whose pronouns you do not know.
+   Both lines after the poem come verbatim from the draw's `colophon`
+   (`assembled_line` and `source_line`). Copy them; do not reword them.
 
-   Do not explain the poem, do not rate it, do not list the unused
-   fragments, and do not add a greeting or a sign-off. The poem is the
+   Do not explain the poem, do not rate it, do not list the fragments or
+   the glue, and do not add a greeting or a sign-off. The poem is the
    message. If the user then wants to talk about it, talk.
 
 ## When running from a routine

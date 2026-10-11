@@ -44,6 +44,7 @@ def build(review: dict, meta: dict) -> dict:
         "name": meta["name"],
         "color": meta["color"],
         "source": meta["source"],
+        "voice": meta.get("voice", ""),
         "built": date.today().isoformat(),
         "counts": {
             "words": sum(1 for f in fragments if f["type"] == "word"),
