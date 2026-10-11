@@ -28,6 +28,33 @@
       ]
     },
     {
+      "id": "donne",
+      "name": "John Donne",
+      "color": "#4a3f6b",
+      "words": 10407,
+      "pairs": 743,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "The Poems of John Donne, Volume 1"
+      ]
+    },
+    {
+      "id": "frost",
+      "name": "Robert Frost",
+      "color": "#6b7a5a",
+      "words": 5818,
+      "pairs": 629,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "A Boy's Will",
+        "North of Boston",
+        "Mountain Interval",
+        "New Hampshire"
+      ]
+    },
+    {
       "id": "hopkins",
       "name": "Gerard Manley Hopkins",
       "color": "#2f5f7a",
@@ -64,6 +91,18 @@
       ]
     },
     {
+      "id": "stein",
+      "name": "Gertrude Stein",
+      "color": "#c4552d",
+      "words": 2535,
+      "pairs": 164,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "Tender Buttons"
+      ]
+    },
+    {
       "id": "whitman",
       "name": "Walt Whitman",
       "color": "#3b6e3b",
@@ -73,6 +112,18 @@
       "built": "2026-10-11",
       "sources": [
         "Leaves of Grass"
+      ]
+    },
+    {
+      "id": "wilde",
+      "name": "Oscar Wilde",
+      "color": "#5a7d3a",
+      "words": 5681,
+      "pairs": 428,
+      "reviewed": false,
+      "built": "2026-10-11",
+      "sources": [
+        "Poems, with The Ballad of Reading Gaol"
       ]
     }
   ]

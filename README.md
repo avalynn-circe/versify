@@ -1,9 +1,9 @@
 # Versify
 
 A Claude skill that composes one short poem a day from the vocabulary of a
-public-domain poet. The shelf currently holds Emily Dickinson, Edgar Allan
-Poe, Walt Whitman, Christina Rossetti, Gerard Manley Hopkins and Lewis
-Carroll.
+public-domain poet. The shelf currently holds ten: Emily Dickinson, Edgar
+Allan Poe, Walt Whitman, Christina Rossetti, Gerard Manley Hopkins, Lewis
+Carroll, Oscar Wilde, Gertrude Stein, John Donne and Robert Frost.
 
 The idea comes from Poet Laureate, a poetry board game by Avalynn Circe:
 take everything a poet ever wrote, break it into single words and small
@@ -62,6 +62,10 @@ to refine the bank; an unreviewed bank works on the day it is built.
    ```bash
    python scripts/ingest.py sources/raw/1322.txt -o library/whitman/clean.txt --drop '^\S'
    ```
+
+   For prose poems (Stein), add `--keep-caps` so capitalized titles stay
+   as text and `--unwrap` so wrapped paragraphs become one line each,
+   which lets pairs be found across the wraps.
 
    This strips the Gutenberg header, footer and license, all-caps title
    lines, roman numeral poem numbers, bracketed notes (single and
@@ -168,7 +172,35 @@ python scripts/ingest.py sources/raw/36308.txt -o /tmp/c36308.txt --start '^CONT
 { cat /tmp/c651.txt; echo; cat /tmp/c13.txt; echo; cat /tmp/c36308.txt; } > library/carroll/clean.txt
 ```
 
+# Wilde (1057): start at Ross's note, cut it and the contents, drop unindented titles, stop at the printer's colophon
+python scripts/ingest.py sources/raw/1057.txt -o library/wilde/clean.txt \
+  --start '^NOTE$' --cut '^NOTE$' '^\s+TO _drift with every passion' --drop '^\S' \
+  --end '^\s*Printed by T\. and A\. CONSTABLE'
+
+# Stein (15396): prose poems; keep the capitalized titles, unwrap paragraphs, drop the three section headings
+python scripts/ingest.py sources/raw/15396.txt -o library/stein/clean.txt \
+  --start '^OBJECTS$' --drop '^(OBJECTS|FOOD|ROOMS)$' --keep-caps --unwrap
+
+# Donne (48688, Grierson volume 1): Songs and Sonets through the Divine Poems; stop before the elegies
+# written about Donne by others; drop italic titles and the textual apparatus the bracket rules miss
+python scripts/ingest.py sources/raw/48688.txt -o library/donne/clean.txt \
+  --start '^SONGS _AND_ SONETS\.$' --end '^ELEGIES UPON THE AUTHOR$' \
+  --drop '^\S' --drop '_16[0-9]{2}' --drop '^\s*[^\[\s]+\]'
+
+# Frost (3021, 3026, 29345, 58611): four books, concatenated
+python scripts/ingest.py sources/raw/3021.txt -o /tmp/f3021.txt --cut '^CONTENTS$' '^Into My Own$' --drop '^\S'
+python scripts/ingest.py sources/raw/3026.txt -o /tmp/f3026.txt --cut '^CONTENTS$' '^Mending Wall$' --drop '^\S'
+python scripts/ingest.py sources/raw/29345.txt -o /tmp/f29345.txt --start '^\s*CONTENTS\s*$' --end '^Transcriber Notes'
+python scripts/ingest.py sources/raw/58611.txt -o /tmp/f58611.txt --start '^\s*I met a lady from the South' --end '^\s*FOOTNOTES\s*$'
+{ cat /tmp/f3021.txt; echo; cat /tmp/f3026.txt; echo; cat /tmp/f29345.txt; echo; cat /tmp/f58611.txt; } > library/frost/clean.txt
+```
+
 Then `python scripts/propose.py <poet>` and `python scripts/build_bank.py <poet>`.
+
+Two copyright notes. Stein's Tender Buttons (1914) is public domain; her
+Autobiography of Alice B. Toklas (1933) is not until 2029 and is not used.
+Frost died in 1963, so his books are public domain in the United States
+only; elsewhere they stay in copyright until 2034.
 
 ## Dealing
 

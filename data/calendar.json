@@ -2,25 +2,181 @@
   "note": "Overrides to the daily rotation. Precedence: birthday, then deathday, then season, then the rotation. Dates are MM-DD; a season has from and to. The phrase is inserted into the colophon after the poet's name, so write it as a clause. Set deathdays to false to ignore every deathday entry.",
   "deathdays": true,
   "events": [
-    {"poet": "dickinson", "kind": "birthday", "date": "12-10", "phrase": "on her birthday"},
-    {"poet": "dickinson", "kind": "deathday", "date": "05-15", "phrase": "on the anniversary of her death"},
-    {"poet": "poe", "kind": "birthday", "date": "01-19", "phrase": "on his birthday"},
-    {"poet": "poe", "kind": "deathday", "date": "10-07", "phrase": "on the anniversary of his death"},
-    {"poet": "whitman", "kind": "birthday", "date": "05-31", "phrase": "on his birthday"},
-    {"poet": "whitman", "kind": "deathday", "date": "03-26", "phrase": "on the anniversary of his death"},
-    {"poet": "rossetti", "kind": "birthday", "date": "12-05", "phrase": "on her birthday"},
-    {"poet": "rossetti", "kind": "deathday", "date": "12-29", "phrase": "on the anniversary of her death"},
-    {"poet": "hopkins", "kind": "birthday", "date": "07-28", "phrase": "on his birthday"},
-    {"poet": "hopkins", "kind": "deathday", "date": "06-08", "phrase": "on the anniversary of his death"},
-    {"poet": "carroll", "kind": "birthday", "date": "01-27", "phrase": "on his birthday"},
-    {"poet": "carroll", "kind": "deathday", "date": "01-14", "phrase": "on the anniversary of his death"},
-
-    {"poet": "poe", "kind": "season", "from": "10-24", "to": "10-31", "phrase": "in Halloween week"},
-    {"poet": "rossetti", "kind": "season", "from": "12-24", "to": "12-26", "phrase": "at Christmas"},
-    {"poet": "whitman", "kind": "season", "from": "07-04", "to": "07-04", "phrase": "on the day Leaves of Grass was first published, in 1855"},
-    {"poet": "whitman", "kind": "season", "from": "06-20", "to": "06-22", "phrase": "at midsummer"},
-    {"poet": "hopkins", "kind": "season", "from": "05-01", "to": "05-07", "phrase": "in the first week of May"},
-    {"poet": "carroll", "kind": "season", "from": "04-01", "to": "04-01", "phrase": "on All Fools' Day"},
-    {"poet": "dickinson", "kind": "season", "from": "12-20", "to": "12-22", "phrase": "at the winter solstice"}
+    {
+      "poet": "dickinson",
+      "kind": "birthday",
+      "date": "12-10",
+      "phrase": "on her birthday"
+    },
+    {
+      "poet": "dickinson",
+      "kind": "deathday",
+      "date": "05-15",
+      "phrase": "on the anniversary of her death"
+    },
+    {
+      "poet": "poe",
+      "kind": "birthday",
+      "date": "01-19",
+      "phrase": "on his birthday"
+    },
+    {
+      "poet": "poe",
+      "kind": "deathday",
+      "date": "10-07",
+      "phrase": "on the anniversary of his death"
+    },
+    {
+      "poet": "whitman",
+      "kind": "birthday",
+      "date": "05-31",
+      "phrase": "on his birthday"
+    },
+    {
+      "poet": "whitman",
+      "kind": "deathday",
+      "date": "03-26",
+      "phrase": "on the anniversary of his death"
+    },
+    {
+      "poet": "rossetti",
+      "kind": "birthday",
+      "date": "12-05",
+      "phrase": "on her birthday"
+    },
+    {
+      "poet": "rossetti",
+      "kind": "deathday",
+      "date": "12-29",
+      "phrase": "on the anniversary of her death"
+    },
+    {
+      "poet": "hopkins",
+      "kind": "birthday",
+      "date": "07-28",
+      "phrase": "on his birthday"
+    },
+    {
+      "poet": "hopkins",
+      "kind": "deathday",
+      "date": "06-08",
+      "phrase": "on the anniversary of his death"
+    },
+    {
+      "poet": "carroll",
+      "kind": "birthday",
+      "date": "01-27",
+      "phrase": "on his birthday"
+    },
+    {
+      "poet": "carroll",
+      "kind": "deathday",
+      "date": "01-14",
+      "phrase": "on the anniversary of his death"
+    },
+    {
+      "poet": "poe",
+      "kind": "season",
+      "from": "10-24",
+      "to": "10-31",
+      "phrase": "in Halloween week"
+    },
+    {
+      "poet": "rossetti",
+      "kind": "season",
+      "from": "12-24",
+      "to": "12-26",
+      "phrase": "at Christmas"
+    },
+    {
+      "poet": "whitman",
+      "kind": "season",
+      "from": "07-04",
+      "to": "07-04",
+      "phrase": "on the day Leaves of Grass was first published, in 1855"
+    },
+    {
+      "poet": "whitman",
+      "kind": "season",
+      "from": "06-20",
+      "to": "06-22",
+      "phrase": "at midsummer"
+    },
+    {
+      "poet": "hopkins",
+      "kind": "season",
+      "from": "05-01",
+      "to": "05-07",
+      "phrase": "in the first week of May"
+    },
+    {
+      "poet": "carroll",
+      "kind": "season",
+      "from": "04-01",
+      "to": "04-01",
+      "phrase": "on All Fools' Day"
+    },
+    {
+      "poet": "dickinson",
+      "kind": "season",
+      "from": "12-20",
+      "to": "12-22",
+      "phrase": "at the winter solstice"
+    },
+    {
+      "poet": "wilde",
+      "kind": "birthday",
+      "date": "10-16",
+      "phrase": "on his birthday"
+    },
+    {
+      "poet": "wilde",
+      "kind": "deathday",
+      "date": "11-30",
+      "phrase": "on the anniversary of his death"
+    },
+    {
+      "poet": "stein",
+      "kind": "birthday",
+      "date": "02-03",
+      "phrase": "on her birthday"
+    },
+    {
+      "poet": "stein",
+      "kind": "deathday",
+      "date": "07-27",
+      "phrase": "on the anniversary of her death"
+    },
+    {
+      "poet": "donne",
+      "kind": "birthday",
+      "date": "01-22",
+      "phrase": "on his birthday, by the traditional date"
+    },
+    {
+      "poet": "donne",
+      "kind": "deathday",
+      "date": "03-31",
+      "phrase": "on the anniversary of his death"
+    },
+    {
+      "poet": "donne",
+      "kind": "season",
+      "from": "12-13",
+      "to": "12-13",
+      "phrase": "on St. Lucy's Day, the year's midnight"
+    },
+    {
+      "poet": "frost",
+      "kind": "birthday",
+      "date": "03-26",
+      "phrase": "on his birthday"
+    },
+    {
+      "poet": "frost",
+      "kind": "deathday",
+      "date": "01-29",
+      "phrase": "on the anniversary of his death"
+    }
   ]
 }

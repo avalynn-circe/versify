@@ -1,0 +1,15 @@
+{
+  "id": "donne",
+  "name": "John Donne",
+  "color": "#4a3f6b",
+  "reviewed": false,
+  "source": {
+    "title": "The Poems of John Donne, Volume 1",
+    "editors": "Herbert J. C. Grierson",
+    "edition": "Oxford, Clarendon Press, 1912, volume 1 (the text; volume 2 is commentary and is not used). Keeps the spelling of the 1633 printing. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/48688",
+    "gutenberg_id": 48688,
+    "note": "Ingest starts at Songs and Sonets, ends at Appendix A, and drops unindented lines (italic titles); the bracketed textual apparatus is removed by the bracket rules."
+  },
+  "voice": "Argument as passion. A poem is a case being made to one listener, a lover or God, with a conceit pushed further than seems reasonable: compasses, a flea, maps, new worlds, a tear. Start in the middle of the quarrel. Rough stresses, abrupt openings, a close that clinches. The spelling here is the 1633 printing's, so 'starre' and 'goe' and 'bee' are his words; use them without apology and do not modernize them."
+}

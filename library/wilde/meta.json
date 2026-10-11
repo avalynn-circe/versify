@@ -1,0 +1,15 @@
+{
+  "id": "wilde",
+  "name": "Oscar Wilde",
+  "color": "#5a7d3a",
+  "reviewed": false,
+  "source": {
+    "title": "Poems, with The Ballad of Reading Gaol",
+    "editors": "Robert Ross",
+    "edition": "Methuen, twelfth edition, 1913: the 1881 Poems entire, The Sphinx, The Ballad of Reading Gaol, Ravenna and uncollected poems. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/1057",
+    "gutenberg_id": 1057,
+    "note": "Ingest starts at Ross's note, cuts the note and contents up to the first poem, and drops unindented lines (titles)."
+  },
+  "voice": "Ornament on purpose. Jewelled nouns, classical names, flowers and gold, a sonnet's turn in the middle, a paradox stated as if it were obvious. Beauty is the subject even when the subject is prison. Keep the diction high and the feeling sincere; the wit lives in the arrangement, never in a joke."
+}

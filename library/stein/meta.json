@@ -1,0 +1,15 @@
+{
+  "id": "stein",
+  "name": "Gertrude Stein",
+  "color": "#c4552d",
+  "reviewed": false,
+  "source": {
+    "title": "Tender Buttons",
+    "editors": "",
+    "edition": "Claire Marie, New York, 1914: Objects, Food, Rooms. Prose poems; paragraphs are unwrapped and the capitalized titles are kept as text. Public domain.",
+    "url": "https://www.gutenberg.org/ebooks/15396",
+    "gutenberg_id": 15396,
+    "note": "The Autobiography of Alice B. Toklas (1933) is not public domain in the US until 2029 and is not used."
+  },
+  "voice": "Repetition is the method. Plain household words turned over until they change: a, is, there, very, change, color. Definitions that do not define. Nothing from outside the room: a cushion, a box, roast beef, a chair, a petticoat. Grammar is correct and meaning is deferred. Let a phrase come back altered; that is the music, and the pairs in this bank are often exactly that."
+}

@@ -14,6 +14,12 @@ What gets removed:
   * --sub REGEX REPLACEMENT (repeatable) rewrites each line before the
     other rules run, for editions that wrap verse in markers such as
     "[Music:" blocks.
+  * --keep-caps keeps all-caps lines instead of treating them as titles,
+    for a text whose capitalized headings are part of the work (Stein's
+    Tender Buttons). Drop the few real headings with --drop.
+  * --unwrap joins each run of consecutive lines into one line, for prose
+    that Gutenberg wraps at seventy characters, so pairs can be found
+    across the wraps. All-caps lines stay on their own line.
   * Everything from a line matching --cut START up to, but not including,
     the next line matching END (repeatable; a cut re-arms after it ends).
     Use this for prefaces, notes sections and prose that sit between poems.
@@ -61,9 +67,33 @@ def is_title(line: str) -> bool:
     return bool(letters) and not any(c.islower() for c in letters)
 
 
+def unwrap(lines: list[str]) -> list[str]:
+    """Join wrapped prose into one line per paragraph; caps lines stay separate."""
+    out: list[str] = []
+    buf: list[str] = []
+
+    def flush():
+        if buf:
+            out.append(" ".join(buf))
+            buf.clear()
+
+    for line in lines:
+        if not line.strip():
+            flush()
+            out.append("")
+        elif is_title(line):
+            flush()
+            out.append(line)
+        else:
+            buf.append(line.strip())
+    flush()
+    return out
+
+
 def clean(lines: list[str], start: str | None, end: str | None,
           drops: list[str], cuts: list[tuple[str, str]] | None = None,
-          subs: list[tuple[str, str]] | None = None) -> tuple[list[str], dict]:
+          subs: list[tuple[str, str]] | None = None, keep_caps: bool = False,
+          do_unwrap: bool = False) -> tuple[list[str], dict]:
     stats = {"boilerplate": 0, "window": 0, "cut": 0, "title": 0, "number": 0,
              "symbols": 0, "bracket": 0, "editorial": 0, "drop": 0, "kept": 0}
     before = len(lines)
@@ -139,11 +169,14 @@ def clean(lines: list[str], start: str | None, end: str | None,
         if PAGE_RE.match(s):
             stats["editorial"] += 1
             continue
-        if is_title(s):
+        if is_title(s) and not keep_caps:
             stats["title"] += 1
             continue
         out.append(s.strip())
         stats["kept"] += 1
+    if do_unwrap:
+        out = unwrap(out)
+        stats["kept"] = sum(1 for line in out if line)
     while out and out[-1] == "":
         out.pop()
     while out and out[0] == "":
@@ -163,11 +196,13 @@ def main(argv=None) -> int:
                     help="drop from a line matching START up to the next line matching END (repeatable)")
     ap.add_argument("--sub", nargs=2, action="append", default=[], metavar=("REGEX", "REPLACEMENT"),
                     help="rewrite each line with re.sub before other rules (repeatable)")
+    ap.add_argument("--keep-caps", action="store_true", help="keep all-caps lines instead of dropping them as titles")
+    ap.add_argument("--unwrap", action="store_true", help="join wrapped prose into one line per paragraph")
     args = ap.parse_args(argv)
 
     lines = read_lines(args.raw)
     out, stats = clean(lines, args.start, args.end, args.drop, [tuple(c) for c in args.cut],
-                       [tuple(c) for c in args.sub])
+                       [tuple(c) for c in args.sub], args.keep_caps, args.unwrap)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(out) + "\n", encoding="utf-8")
     print(f"wrote {args.out} ({stats['kept']} verse lines)")

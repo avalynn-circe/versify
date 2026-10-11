@@ -78,6 +78,16 @@ class IngestTests(unittest.TestCase):
         out, _ = ingest.clean(["Was standing near me in the gloom\u2014", "a word\u2013another"], None, None, [])
         self.assertEqual(out, ["Was standing near me in the gloom--", "a word--another"])
 
+    def test_keep_caps_and_unwrap_for_prose(self):
+        lines = ["OBJECTS", "A CARAFE, THAT IS A BLIND GLASS.", "A kind in glass and a cousin, a spectacle",
+                 "and nothing strange.", "", "The difference", "is spreading."]
+        out, _ = ingest.clean(lines, None, None, [r"^OBJECTS$"], keep_caps=True, do_unwrap=True)
+        self.assertEqual(out, ["A CARAFE, THAT IS A BLIND GLASS.",
+                               "A kind in glass and a cousin, a spectacle and nothing strange.", "",
+                               "The difference is spreading."])
+        out, _ = ingest.clean(lines, None, None, [])
+        self.assertNotIn("A CARAFE, THAT IS A BLIND GLASS.", out, "caps lines are titles by default")
+
     def test_sub_unwraps_music_blocks(self):
         lines = ["[Illustration: a crocodile]", "[Music:", "    How doth the little crocodile", "    Improve his shining tail!]", "[Illustration]"]
         out, _ = ingest.clean(lines, None, None, [], subs=[(r"^\[Music:\s*$", ""), (r"^(?!\[)(.*)\]\s*$", r"\1")])
