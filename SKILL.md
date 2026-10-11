@@ -30,7 +30,9 @@ poet per day, so the same day always yields the same draw.
    `--date YYYY-MM-DD` to replay another day's draw. Read the printed JSON:
    `fragments` (each with `text` and `type`), `glue` (`free` and `once`),
    `use` (how many distinct fragments the poem must contain, normally 16),
-   `lines`, `voice`, `rules` and `colophon`.
+   `lines`, `voice`, `rules`, `colophon`, and `section` when the day's
+   fragments all come from one book or group of poems (they usually do,
+   which is why a draw tends to share a world).
 
 2. **Compose.** Write a poem using exactly `use` of the dealt fragments.
    The hard rules, which the checker enforces:

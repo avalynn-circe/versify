@@ -20,6 +20,11 @@ What gets removed:
   * --unwrap joins each run of consecutive lines into one line, for prose
     that Gutenberg wraps at seventy characters, so pairs can be found
     across the wraps. All-caps lines stay on their own line.
+  * --section REGEX (repeatable) turns matching heading lines into section
+    markers ("## Name") instead of dropping them, so the dealer can draw a
+    whole day from one book or one group of poems. If the regex has a
+    group, the group is the name. Names are tidied: roman numerals and
+    "BOOK N." prefixes go, underscores go, words are capitalized.
   * Everything from a line matching --cut START up to, but not including,
     the next line matching END (repeatable; a cut re-arms after it ends).
     Use this for prefaces, notes sections and prose that sit between poems.
@@ -62,6 +67,20 @@ def strip_boilerplate(lines: list[str]) -> list[str]:
     return lines[start:end]
 
 
+SMALL_WORDS = {"of", "and", "the", "in", "to", "a", "an", "de", "et", "or", "on", "at", "for"}
+
+
+def section_name(raw: str) -> str:
+    """Tidy a heading into a section name: 'IV. TIME AND ETERNITY.' -> 'Time and Eternity'."""
+    s = raw.replace("_", " ").strip()
+    s = re.sub(r"^(BOOK\s+)?[IVXLC]+\.\s*", "", s)
+    s = re.sub(r",?\s*ETC\.?$", "", s, flags=re.I)
+    s = s.strip(" .,:;")
+    s = re.sub(r"\s+", " ", s)
+    words = s.lower().split()
+    return " ".join(w if (i and w in SMALL_WORDS) else w[:1].upper() + w[1:] for i, w in enumerate(words))
+
+
 def is_title(line: str) -> bool:
     letters = [c for c in line if c.isalpha()]
     return bool(letters) and not any(c.islower() for c in letters)
@@ -81,7 +100,7 @@ def unwrap(lines: list[str]) -> list[str]:
         if not line.strip():
             flush()
             out.append("")
-        elif is_title(line):
+        elif is_title(line) or line.startswith("## "):
             flush()
             out.append(line)
         else:
@@ -93,9 +112,9 @@ def unwrap(lines: list[str]) -> list[str]:
 def clean(lines: list[str], start: str | None, end: str | None,
           drops: list[str], cuts: list[tuple[str, str]] | None = None,
           subs: list[tuple[str, str]] | None = None, keep_caps: bool = False,
-          do_unwrap: bool = False) -> tuple[list[str], dict]:
+          do_unwrap: bool = False, sections: list[str] | None = None) -> tuple[list[str], dict]:
     stats = {"boilerplate": 0, "window": 0, "cut": 0, "title": 0, "number": 0,
-             "symbols": 0, "bracket": 0, "editorial": 0, "drop": 0, "kept": 0}
+             "symbols": 0, "bracket": 0, "editorial": 0, "drop": 0, "section": 0, "kept": 0}
     before = len(lines)
     lines = strip_boilerplate(lines)
     stats["boilerplate"] = before - len(lines)
@@ -118,6 +137,7 @@ def clean(lines: list[str], start: str | None, end: str | None,
     drop_res = [re.compile(d) for d in drops]
     cut_res = [(re.compile(a), re.compile(b)) for a, b in (cuts or [])]
     sub_res = [(re.compile(a), b) for a, b in (subs or [])]
+    section_res = [re.compile(x) for x in (sections or [])]
     active_end = None
     in_bracket = False
     out: list[str] = []
@@ -150,6 +170,19 @@ def clean(lines: list[str], start: str | None, end: str | None,
             if out and out[-1] != "":
                 out.append("")
             continue
+        matched_section = None
+        for rx in section_res:
+            m = rx.search(s)
+            if m:
+                matched_section = m.group(1) if m.groups() else m.group(0)
+                break
+        if matched_section is not None:
+            if out and out[-1] != "":
+                out.append("")
+            out.append("## " + section_name(matched_section))
+            out.append("")
+            stats["section"] += 1
+            continue
         # Bracket blocks are recognized before --drop, so a drop pattern that
         # happens to match a block's opening line cannot let the rest leak.
         if BRACKET_RE.match(s):
@@ -178,7 +211,7 @@ def clean(lines: list[str], start: str | None, end: str | None,
         stats["kept"] += 1
     if do_unwrap:
         out = unwrap(out)
-        stats["kept"] = sum(1 for line in out if line)
+        stats["kept"] = sum(1 for line in out if line and not line.startswith("## "))
     while out and out[-1] == "":
         out.pop()
     while out and out[0] == "":
@@ -200,14 +233,16 @@ def main(argv=None) -> int:
                     help="rewrite each line with re.sub before other rules (repeatable)")
     ap.add_argument("--keep-caps", action="store_true", help="keep all-caps lines instead of dropping them as titles")
     ap.add_argument("--unwrap", action="store_true", help="join wrapped prose into one line per paragraph")
+    ap.add_argument("--section", action="append", default=[], metavar="REGEX",
+                    help="heading lines matching this become section markers (repeatable)")
     args = ap.parse_args(argv)
 
     lines = read_lines(args.raw)
     out, stats = clean(lines, args.start, args.end, args.drop, [tuple(c) for c in args.cut],
-                       [tuple(c) for c in args.sub], args.keep_caps, args.unwrap)
+                       [tuple(c) for c in args.sub], args.keep_caps, args.unwrap, args.section)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(out) + "\n", encoding="utf-8")
-    print(f"wrote {args.out} ({stats['kept']} verse lines)")
+    print(f"wrote {args.out} ({stats['kept']} verse lines, {stats['section']} section markers)")
     for k, v in stats.items():
         if k != "kept":
             print(f"  removed as {k}: {v}")

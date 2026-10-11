@@ -1,3 +1,5 @@
+## Phantasmagoria and Other Poems
+
 ONE winter night, at half-past nine,
 Cold, tired, and cross, and muddy,
 I had come home, too late to dine,
@@ -1573,26 +1575,6 @@ Each unto each were best, most far:
 “Yea, each to each was worse than foe:
 Thou, a scared dullard, gibbering low,
 
-I NEVER loved a dear Gazelle--
-_Nor anything that cost me much_:
-_High prices profit those who sell_,
-_But why should I be fond of such_?
-
-To glad me with his soft black eye
-_My son comes trotting home from school_;
-_He’s had a fight but can’t tell why_--
-_He always was a little fool_!
-
-But, when he came to know me well,
-_He kicked me out_, _her testy Sire_:
-_And when I stained my hair_, _that Belle_
-_Might note the change_, _and thus admire_
-
-And love me, it was sure to dye
-_A muddy green or staring blue_:
-_Whilst one might trace_, _with half an eye_,
-_The still triumphant carrot through_.
-
 FIVE little girls, of Five, Four, Three, Two, One:
 Rolling on the hearthrug, full of tricks and fun.
 
@@ -2264,6 +2246,8 @@ Who still shall pour His rays sublime,
 One crystal flood, from East to West,
 When _ye_ have burned your little time
 And feebly flickered into rest!
+
+## The Hunting of the Snark
 
 Inscribed to a dear Child:
 in memory of golden summer hours
@@ -2990,6 +2974,8 @@ In the midst of the word he was trying to say,
 In the midst of his laughter and glee,
 He had softly and suddenly vanished away---
 For the Snark _was_ a Boojum, you see.
+
+## Songs from Alice
 
 It has been found necessary to slightly alter the original
 arrangement of the songs; "Pig and Pepper" and "Twinkle,

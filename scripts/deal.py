@@ -127,13 +127,43 @@ def weighted_sample(rng: random.Random, items: list[dict], n: int, scheme: str) 
     return out
 
 
+def eligible_sections(bank: dict, floor: int) -> list[str]:
+    """Sections with enough distinct words to deal a whole day from."""
+    return sorted(name for name, c in (bank.get("sections") or {}).items() if c.get("words", 0) >= floor)
+
+
+def pick_section(bank: dict, poet: str, day: date, settings: dict, wanted: str | None) -> str | None:
+    """The section today's draw comes from, or None for the whole bank.
+
+    wanted: a section name to force, "none" for the whole bank, or None to
+    let the day decide (seeded, so the same day always picks the same one).
+    """
+    if wanted == "none":
+        return None
+    if wanted:
+        if wanted not in (bank.get("sections") or {}):
+            known = ", ".join(sorted(bank.get("sections") or {})) or "no sections"
+            raise SystemExit(f"no section '{wanted}' for {poet} (known: {known})")
+        return wanted
+    if not settings.get("sections", True):
+        return None
+    options = eligible_sections(bank, settings.get("section_min_words", 400))
+    if not options:
+        return None
+    rng = random.Random(stable_seed(poet, day.isoformat(), "section"))
+    return rng.choice(options)
+
+
 def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
-              seed: int | None = None, occasion: dict | None = None) -> dict:
+              seed: int | None = None, occasion: dict | None = None,
+              section: str | None = None) -> dict:
     settings = load_settings()
     bank = load_bank(poet)
+    chosen = pick_section(bank, poet, day, settings, section)
+    pool = [f for f in bank["fragments"] if chosen is None or chosen in f.get("sections", [])]
     seed_value = seed if seed is not None else stable_seed(poet, day.isoformat())
     rng = random.Random(seed_value)
-    picks = weighted_sample(rng, bank["fragments"], n, scheme)
+    picks = weighted_sample(rng, pool, n, scheme)
     glue = load_glue()
     srcs = bank.get("sources") or [bank.get("source", {})]
     src = srcs[0]
@@ -142,6 +172,7 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
     source_line = f"Source: {titles} (Project Gutenberg" + (f" {gids})." if gids else ").")
     pretty_date = f"{day.day} {day.strftime('%B %Y')}"
     phrase = f", {occasion['phrase']}" if occasion and occasion.get("phrase") else ""
+    sec = f" ({chosen})" if chosen else ""
     return {
         "poet": bank["id"],
         "poet_name": bank["name"],
@@ -149,6 +180,7 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
         "seed": seed_value,
         "weight": scheme,
         "use": use,
+        "section": chosen,
         "fragments": [{"text": p["text"], "type": p["type"]} for p in picks],
         "glue": glue,
         "lines": [settings.get("min_lines", 4), settings.get("max_lines", 8)],
@@ -156,7 +188,7 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
         "source": src,
         "occasion": {"kind": occasion["kind"], "phrase": occasion.get("phrase", "")} if occasion else None,
         "colophon": {
-            "assembled_line": f"Assembled from the words of {bank['name']}{phrase}, {pretty_date}.",
+            "assembled_line": f"Assembled from the words of {bank['name']}{sec}{phrase}, {pretty_date}.",
             "source_line": source_line,
         },
         "rules": [
@@ -177,6 +209,8 @@ def print_draw(draw: dict, fmt: str) -> None:
         print(json.dumps(draw, indent=2, ensure_ascii=False))
         return
     print(f"{draw['poet_name']}, {draw['date']}  (seed {draw['seed']})")
+    if draw.get("section"):
+        print(f"section: {draw['section']}")
     if draw.get("occasion"):
         print(f"occasion: {draw['occasion']['kind']}, {draw['occasion']['phrase']}")
     print(f"use exactly {draw['use']} of these {len(draw['fragments'])} fragments:")
@@ -353,6 +387,7 @@ def main(argv=None) -> int:
         p.add_argument("--seed", type=int, help="override the date seed")
         p.add_argument("--format", default="json", choices=["json", "text"])
         p.add_argument("--out", type=Path, help="also write the draw as JSON to this file")
+        p.add_argument("--section", help="draw from this section only, or 'none' for the whole bank")
 
     p_today = sub.add_parser("today", help="today's poet by rotation, and the draw")
     add_draw_args(p_today)
@@ -365,6 +400,8 @@ def main(argv=None) -> int:
     p_check.add_argument("--use", type=int, help="override required fragment count")
     p_check.add_argument("--lines", type=int, nargs=2, metavar=("MIN", "MAX"), help="override the line bounds")
     sub.add_parser("poets", help="list available banks")
+    p_sec = sub.add_parser("sections", help="list a poet's sections and which are big enough to deal from")
+    p_sec.add_argument("--poet", required=True)
     p_cal = sub.add_parser("calendar", help="list the year's overrides and who is up each day")
     p_cal.add_argument("--year", type=int, default=date.today().year)
     p_cal.add_argument("--days", type=int, help="print the next N days from today instead")
@@ -375,7 +412,8 @@ def main(argv=None) -> int:
         banks = list_banks()
         for pid, path in banks.items():
             b = load_json(path)
-            print(f"{pid}: {b['name']} ({b['counts']['words']} words, {b['counts']['pairs']} pairs)")
+            nsec = len(b.get("sections") or {})
+            print(f"{pid}: {b['name']} ({b['counts']['words']} words, {b['counts']['pairs']} pairs, {nsec} sections)")
         print("rotation: " + " -> ".join(settings["rotation"]) + f" from {settings['rotation_epoch']}")
         today_poet, today_ev = choose_poet(date.today(), settings, load_calendar())
         print("today: " + today_poet + (f"  ({today_ev['kind']}: {today_ev.get('phrase', '')})" if today_ev else ""))
@@ -407,11 +445,23 @@ def main(argv=None) -> int:
             ev = occasion_for_date(day, calendar, {poet})
         else:
             poet, ev = choose_poet(day, settings, calendar)
-        draw = make_draw(poet, day, args.n, args.use, args.weight, args.seed, ev)
+        draw = make_draw(poet, day, args.n, args.use, args.weight, args.seed, ev, args.section)
         if args.out:
             args.out.parent.mkdir(parents=True, exist_ok=True)
             args.out.write_text(json.dumps(draw, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print_draw(draw, args.format)
+        return 0
+
+    if args.cmd == "sections":
+        bank = load_bank(args.poet)
+        floor = settings.get("section_min_words", 400)
+        secs = bank.get("sections") or {}
+        if not secs:
+            print(f"{args.poet}: no sections; every draw uses the whole bank")
+            return 0
+        for name, c in sorted(secs.items(), key=lambda kv: -kv[1]["words"]):
+            ok = "dealt from" if c["words"] >= floor else f"too small (floor {floor})"
+            print(f"  {name:32s} {c['words']:6d} words {c['pairs']:5d} pairs   {ok}")
         return 0
 
     if args.cmd == "check":

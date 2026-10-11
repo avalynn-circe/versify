@@ -1,3 +1,5 @@
+## Poems of Later Life
+
 Once upon a midnight dreary, while I pondered, weak and weary,
 Over many a quaint and curious volume of forgotten lore--
 While I nodded, nearly napping, suddenly there came a tapping,
@@ -937,6 +939,8 @@ Lest an evil step be taken,--
 Lest the dead who is forsaken
 May not be happy now.
 
+## Poems of Manhood
+
 Ah, broken is the golden bowl! the spirit flown forever!
 Let the bell toll!--a saintly soul floats on the Stygian river.
 And, Guy de Vere, hast _thou_ no tear?--weep now or never more!
@@ -1260,6 +1264,8 @@ Now, when storms of Fate o'ercast
 Darkly my Present and my Past,
 Let my future radiant shine
 With sweet hopes of thee and thine!
+
+## Poems of Youth
 
 SCIENCE! true daughter of Old Time thou art!
 Who alterest all things with thy peering eyes.
@@ -2521,6 +2527,8 @@ XI.      Therefore, to thee this night
 I will no requiem raise,
 But waft thee on thy flight,
 With a Pæan of old days.
+
+## Doubtful Poems
 
 From childhood's hour I have not been
 As others were--I have not seen

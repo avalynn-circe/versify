@@ -38,6 +38,8 @@ class State:
         clean_path = (ROOT / clean) if clean else None
         if clean_path and clean_path.exists():
             for line in read_lines(clean_path):
+                if line.startswith("## "):
+                    continue
                 toks = tokenize_line(line)
                 for a, b in zip(toks, toks[1:]):
                     self.pairs[(a, b)] += 1

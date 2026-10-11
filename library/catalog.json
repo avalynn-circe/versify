@@ -5,10 +5,11 @@
       "id": "carroll",
       "name": "Lewis Carroll",
       "color": "#b0742a",
-      "words": 3815,
-      "pairs": 150,
+      "words": 3805,
+      "pairs": 149,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 3,
       "sources": [
         "Phantasmagoria and Other Poems",
         "The Hunting of the Snark",
@@ -23,6 +24,7 @@
       "pairs": 121,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 4,
       "sources": [
         "Poems by Emily Dickinson, Three Series, Complete"
       ]
@@ -35,6 +37,7 @@
       "pairs": 558,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 11,
       "sources": [
         "The Poems of John Donne, Volume 1"
       ]
@@ -47,6 +50,7 @@
       "pairs": 629,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 4,
       "sources": [
         "A Boy's Will",
         "North of Boston",
@@ -62,6 +66,7 @@
       "pairs": 64,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 3,
       "sources": [
         "Poems of Gerard Manley Hopkins"
       ]
@@ -74,6 +79,7 @@
       "pairs": 164,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 4,
       "sources": [
         "The Complete Poetical Works of Edgar Allan Poe"
       ]
@@ -86,6 +92,7 @@
       "pairs": 735,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 4,
       "sources": [
         "Poems"
       ]
@@ -98,6 +105,7 @@
       "pairs": 164,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 3,
       "sources": [
         "Tender Buttons"
       ]
@@ -110,6 +118,7 @@
       "pairs": 1115,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 13,
       "sources": [
         "Leaves of Grass"
       ]
@@ -122,6 +131,7 @@
       "pairs": 428,
       "reviewed": false,
       "built": "2026-10-11",
+      "sections": 11,
       "sources": [
         "Poems, with The Ballad of Reading Gaol"
       ]

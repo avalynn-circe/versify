@@ -93,6 +93,20 @@ class IngestTests(unittest.TestCase):
         out, _ = ingest.clean(lines, None, None, [r"_16[0-9]{2}"])
         self.assertEqual(out, ["A real verse line"])
 
+    def test_section_markers_and_names(self):
+        lines = ["IV. TIME AND ETERNITY.", "  The lantern swings,", "BOOK III.  SONG OF MYSELF", "  I celebrate",
+                 "SONGS _AND_ SONETS.", "THE PRINCE'S PROGRESS, ETC.", "  go"]
+        out, stats = ingest.clean(lines, None, None, [r"^\S"],
+                                  sections=[r"^(?:[IVX]+\. )?(LIFE|LOVE|NATURE|TIME AND ETERNITY)\.$",
+                                            r"^BOOK\s+[IVXL]+\.\s+(.+)$", r"^SONGS _AND_ SONETS\.$",
+                                            r"^THE PRINCE'S PROGRESS, ETC\.$"])
+        self.assertEqual([l for l in out if l.startswith("## ")],
+                         ["## Time and Eternity", "## Song of Myself", "## Songs and Sonets", "## The Prince's Progress"])
+        self.assertEqual(stats["section"], 4)
+        self.assertIn("The lantern swings,", out)
+        self.assertEqual(ingest.section_name("IMPRESSIONS DE THÉÂTRE"), "Impressions de Théâtre")
+        self.assertEqual(ingest.section_name("POEMS 1876-1889"), "Poems 1876-1889")
+
     def test_sub_unwraps_music_blocks(self):
         lines = ["[Illustration: a crocodile]", "[Music:", "    How doth the little crocodile", "    Improve his shining tail!]", "[Illustration]"]
         out, _ = ingest.clean(lines, None, None, [], subs=[(r"^\[Music:\s*$", ""), (r"^(?!\[)(.*)\]\s*$", r"\1")])
@@ -124,6 +138,15 @@ class ProposeTests(unittest.TestCase):
         self.assertEqual(words["the"]["status"], "pending")
         self.assertEqual(words["o'er"]["status"], "pending")
         self.assertEqual(words["to-day"]["status"], "approved")
+
+    def test_sections_recorded_per_fragment(self):
+        lines = ["## Life", "the lantern swings", "pallid bust", "", "## Love", "pallid bust again", "the bee"]
+        items = propose.propose(lines, set(), 2, 0.0)
+        by = {common.item_key(i): i for i in items}
+        self.assertEqual(by["word:lantern"]["sections"], ["Life"])
+        self.assertEqual(by["word:pallid"]["sections"], ["Life", "Love"])
+        self.assertEqual(by["pair:pallid bust"]["sections"], ["Life", "Love"])
+        self.assertNotIn("##", "".join(i["fragment"] for i in items))
 
     def test_sorted_by_frequency(self):
         words = [it for it in self.items if it["type"] == "word"]
@@ -165,6 +188,11 @@ class BuildBankTests(unittest.TestCase):
         texts = {f["text"] for f in bank["fragments"]}
         self.assertEqual(texts, {"lantern", "pallid bust"})
         self.assertEqual(bank["counts"], {"words": 1, "pairs": 1})
+        self.assertEqual(bank["sections"], {})
+        review["items"][0]["sections"] = ["Life"]
+        review["items"][2]["sections"] = ["Life", "Love"]
+        bank = build_bank.build(review, meta)
+        self.assertEqual(bank["sections"], {"Life": {"words": 1, "pairs": 1}, "Love": {"words": 0, "pairs": 1}})
         self.assertEqual(bank["source"]["url"], "u")
         self.assertEqual(bank["sources"], [meta["source"]])
         self.assertFalse(bank["reviewed"])
@@ -219,6 +247,39 @@ class DealTests(unittest.TestCase):
     def tearDownClass(cls):
         deal.LIBRARY = cls._orig
         cls.tmp.cleanup()
+
+    def test_section_pick(self):
+        bank = {"sections": {"Big": {"words": 500, "pairs": 3}, "Small": {"words": 20, "pairs": 0},
+                             "Other": {"words": 900, "pairs": 1}}}
+        settings = {"sections": True, "section_min_words": 400}
+        self.assertEqual(deal.eligible_sections(bank, 400), ["Big", "Other"])
+        a = deal.pick_section(bank, "x", date(2026, 10, 13), settings, None)
+        self.assertEqual(a, deal.pick_section(bank, "x", date(2026, 10, 13), settings, None))
+        self.assertIn(a, ["Big", "Other"])
+        self.assertIsNone(deal.pick_section(bank, "x", date(2026, 10, 13), settings, "none"))
+        self.assertEqual(deal.pick_section(bank, "x", date(2026, 10, 13), settings, "Small"), "Small")
+        self.assertIsNone(deal.pick_section(bank, "x", date(2026, 10, 13), {"sections": False}, None))
+        self.assertIsNone(deal.pick_section({"sections": {}}, "x", date(2026, 10, 13), settings, None))
+        with self.assertRaises(SystemExit):
+            deal.pick_section(bank, "x", date(2026, 10, 13), settings, "Nope")
+
+    def test_draw_restricted_to_section(self):
+        bank_path = self.poets / "bank.json"
+        bank = common.load_json(bank_path)
+        for i, f in enumerate(bank["fragments"]):
+            f["sections"] = ["Odd"] if i % 2 else ["Even"]
+        bank["sections"] = {"Odd": {"words": 500, "pairs": 0}, "Even": {"words": 500, "pairs": 0}}
+        common.save_json(bank_path, bank)
+        try:
+            d = deal.make_draw("sample", date(2026, 10, 13), 12, 6, "log", section="Odd")
+            odd = {f["text"] for f in bank["fragments"] if f["sections"] == ["Odd"]}
+            self.assertTrue(all(f["text"] in odd for f in d["fragments"]))
+            self.assertEqual(d["section"], "Odd")
+            self.assertEqual(d["colophon"]["assembled_line"], "Assembled from the words of Nobody (Odd), 13 October 2026.")
+            whole = deal.make_draw("sample", date(2026, 10, 13), 12, 6, "log", section="none")
+            self.assertIsNone(whole["section"])
+        finally:
+            common.save_json(bank_path, self.bank)
 
     def test_calendar_precedence_and_colophon(self):
         cal = {"deathdays": True, "events": [

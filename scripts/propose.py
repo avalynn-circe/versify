@@ -31,18 +31,33 @@ from common import (item_key, load_function_words, load_json,  # noqa: E402
                     save_json, tokenize_line)
 
 
-def count_corpus(lines: list[str]) -> tuple[Counter, Counter, int]:
-    """Word counts, within-line bigram counts, and total token count."""
+def count_corpus(lines: list[str]) -> tuple[Counter, Counter, int, dict, dict]:
+    """Word counts, within-line bigram counts, total tokens, and the sections each appears in.
+
+    A line "## Name" is a section marker written by ingest.py; everything
+    after it belongs to that section until the next marker.
+    """
     words: Counter = Counter()
     pairs: Counter = Counter()
+    word_sections: dict = {}
+    pair_sections: dict = {}
     total = 0
+    section = None
     for line in lines:
+        if line.startswith("## "):
+            section = line[3:].strip() or None
+            continue
         toks = tokenize_line(line)
         total += len(toks)
         words.update(toks)
+        if section:
+            for t in toks:
+                word_sections.setdefault(t, set()).add(section)
         for a, b in zip(toks, toks[1:]):
             pairs[(a, b)] += 1
-    return words, pairs, total
+            if section:
+                pair_sections.setdefault((a, b), set()).add(section)
+    return words, pairs, total, word_sections, pair_sections
 
 
 def pmi(pair_count: int, a_count: int, b_count: int, total: int) -> float:
@@ -51,11 +66,14 @@ def pmi(pair_count: int, a_count: int, b_count: int, total: int) -> float:
 
 def propose(lines: list[str], function_words: set[str],
             min_pair_count: int, min_pmi: float) -> list[dict]:
-    words, pairs, total = count_corpus(lines)
+    words, pairs, total, word_sections, pair_sections = count_corpus(lines)
     items: list[dict] = []
     for w, c in words.most_common():
         status = "pending" if w in function_words else "approved"
-        items.append({"fragment": w, "type": "word", "count": c, "status": status})
+        it = {"fragment": w, "type": "word", "count": c, "status": status}
+        if w in word_sections:
+            it["sections"] = sorted(word_sections[w])
+        items.append(it)
     candidates = []
     for (a, b), c in pairs.items():
         if c < min_pair_count or a in function_words or b in function_words:
@@ -63,8 +81,11 @@ def propose(lines: list[str], function_words: set[str],
         score = pmi(c, words[a], words[b], total)
         if score < min_pmi:
             continue
-        candidates.append({"fragment": f"{a} {b}", "type": "pair", "count": c,
-                           "pmi": round(score, 2), "status": "pending"})
+        it = {"fragment": f"{a} {b}", "type": "pair", "count": c,
+              "pmi": round(score, 2), "status": "pending"}
+        if (a, b) in pair_sections:
+            it["sections"] = sorted(pair_sections[(a, b)])
+        candidates.append(it)
     candidates.sort(key=lambda it: (-it["count"], -it["pmi"], it["fragment"]))
     items.extend(candidates)
     return items

@@ -80,6 +80,8 @@ to refine the bank; an unreviewed bank works on the day it is built.
      next END match: prefaces, notes sections, prose between poems
    - `--sub REGEX REPLACEMENT` (repeatable) rewrites lines first, for
      editions that wrap verse in markers
+   - `--section REGEX` (repeatable) turns heading lines into section
+     markers instead of dropping them; see Sections below
 
    Only verse should remain. For a poet with several source texts, ingest
    each and concatenate the results into one `clean.txt`.
@@ -138,7 +140,8 @@ each `meta.json`, saved as `sources/raw/<id>.txt`.
 ```bash
 # Dickinson (12242): cut each series' front matter, prefaces and the transcriber's note
 python scripts/ingest.py sources/raw/12242.txt -o library/dickinson/clean.txt \
-  --cut '^POEMS$' '^(I\. LIFE\.|\s+This is my letter to the world)'
+  --cut '^POEMS$' '^(I\. LIFE\.|\s+This is my letter to the world)' \
+  --section '^(?:[IVX]+\. )?(LIFE|LOVE|NATURE|TIME AND ETERNITY)\.$'
 
 # Poe (10031): window after Ingram's memoir, before the prose poems and essays;
 # cut Poe's preface, the four notes sections, the verse drama Politian, and a prose letter
@@ -148,20 +151,23 @@ python scripts/ingest.py sources/raw/10031.txt -o library/poe/clean.txt \
   --cut '^PREFACE\.$' '^THE RAVEN\.$' \
   --cut '^NOTES\.$' '^\s*(POEMS OF MANHOOD|AN UNPUBLISHED DRAMA|DOUBTFUL POEMS|PROSE POEMS)\.?\s*$' \
   --cut '^\s*AN UNPUBLISHED DRAMA\.?\s*$' '^\s*POEMS OF YOUTH\s*$' \
-  --cut '^INTRODUCTION TO POEMS\.--1831\.$' '^SONNET--TO SCIENCE\.$'
+  --cut '^INTRODUCTION TO POEMS\.--1831\.$' '^SONNET--TO SCIENCE\.$' \
+  --section '^\s*(POEMS OF LATER LIFE|POEMS OF MANHOOD|POEMS OF YOUTH|DOUBTFUL POEMS)\.?\s*$'
 
 # Whitman (1322): titles are unindented, verse is indented
 python scripts/ingest.py sources/raw/1322.txt -o library/whitman/clean.txt \
-  --drop '^\S' --drop '^\s*Walt Whitman\s*$'
+  --drop '^\S' --drop '^\s*Walt Whitman\s*$' --section '^BOOK\s+[IVXL]+\.\s+(.+)$'
 
 # Rossetti (19188): start at the first poem, cut one prose note, stop at the transcriber's note
 python scripts/ingest.py sources/raw/19188.txt -o library/rossetti/clean.txt \
-  --start '^\s+GOBLIN MARKET\.$' --end "^Transcriber's Note:" --cut '^Note\.--' '^$'
+  --start '^\s+GOBLIN MARKET\.$' --end "^Transcriber's Note:" --cut '^Note\.--' '^$' \
+  --section "^\s*(GOBLIN MARKET|DEVOTIONAL PIECES|THE PRINCE'S PROGRESS, ETC|A PAGEANT AND OTHER POEMS)\.$"
 
 # Hopkins (22403): start at the early poems, stop at the editor's notes
 python scripts/ingest.py sources/raw/22403.txt -o library/hopkins/clean.txt \
   --start '^_EARLY POEMS_$' --end "^EDITOR'S NOTES$" \
-  --cut '^\(Transcriber' '^$' --drop '^\(Variant'
+  --cut '^\(Transcriber' '^$' --drop '^\(Variant' \
+  --section '^_?(EARLY POEMS|POEMS 1876-1889|UNFINISHED POEMS)_?$'
 
 # Carroll (651, 13, 36308): three sources, concatenated
 python scripts/ingest.py sources/raw/651.txt -o /tmp/c651.txt --start '^PHANTASMAGORIA$' --drop '^\S'
@@ -169,30 +175,32 @@ python scripts/ingest.py sources/raw/13.txt -o /tmp/c13.txt --start '^Inscribed 
   --cut '^Contents$' '^PREFACE$' --cut '^PREFACE$' '^\s*Fit the First' --drop '(?i)^\s*fit the \w+\s*$'
 python scripts/ingest.py sources/raw/36308.txt -o /tmp/c36308.txt --start '^CONTENTS\.$' \
   --sub '^\[Music:\s*$' '' --sub '^(?!\[)(.*)\]\s*$' '\1'
-{ cat /tmp/c651.txt; echo; cat /tmp/c13.txt; echo; cat /tmp/c36308.txt; } > library/carroll/clean.txt
+{ echo '## Phantasmagoria and Other Poems'; echo; cat /tmp/c651.txt; echo; echo '## The Hunting of the Snark'; echo; cat /tmp/c13.txt; echo; echo '## Songs from Alice'; echo; cat /tmp/c36308.txt; } > library/carroll/clean.txt
 ```
 
 # Wilde (1057): start at Ross's note, cut it and the contents, drop unindented titles, stop at the printer's colophon
 python scripts/ingest.py sources/raw/1057.txt -o library/wilde/clean.txt \
   --start '^NOTE$' --cut '^NOTE$' '^\s+TO _drift with every passion' --drop '^\S' \
-  --end '^\s*Printed by T\. and A\. CONSTABLE'
+  --end '^\s*Printed by T\. and A\. CONSTABLE' \
+  --section '^(ELEUTHERIA|ROSA MYSTICA|WIND FLOWERS|FLOWERS OF GOLD|IMPRESSIONS DE TH.*|THE FOURTH MOVEMENT|FLOWER OF LOVE|UNCOLLECTED POEMS|THE SPHINX|THE BALLAD OF READING GAOL|RAVENNA)$'
 
 # Stein (15396): prose poems; keep the capitalized titles, unwrap paragraphs, drop the three section headings
 python scripts/ingest.py sources/raw/15396.txt -o library/stein/clean.txt \
-  --start '^OBJECTS$' --drop '^(OBJECTS|FOOD|ROOMS)$' --keep-caps --unwrap
+  --start '^OBJECTS$' --keep-caps --unwrap --section '^(OBJECTS|FOOD|ROOMS)$'
 
 # Donne (48688, Grierson volume 1): Songs and Sonets through the Divine Poems; stop before the elegies
 # written about Donne by others; drop italic titles and the textual apparatus the bracket rules miss
 python scripts/ingest.py sources/raw/48688.txt -o library/donne/clean.txt \
   --start '^SONGS _AND_ SONETS\.$' --end '^ELEGIES UPON THE AUTHOR$' \
-  --drop '^\S' --drop '_16[0-9]{2}' --drop '^\s*[^\[\s]+\]'
+  --drop '^\S' --drop '_16[0-9]{2}' --drop '^\s*[^\[\s]+\]' \
+  --section "^(SONGS _AND_ SONETS|EPIGRAMS|ELEGIES|HEROICALL EPISTLE|EPITHALAMIONS|SATYRES|LETTERS TO SEVERALL PERSONAGES|AN ANATOMIE OF THE WORLD|OF THE PROGRESSE OF THE SOULE|EPICEDES AND OBSEQUIES|EPITAPHS|INFINITATI SACRUM|DIVINE POEMS)[.,]?$"
 
 # Frost (3021, 3026, 29345, 58611): four books, concatenated
 python scripts/ingest.py sources/raw/3021.txt -o /tmp/f3021.txt --cut '^CONTENTS$' '^Into My Own$' --drop '^\S'
 python scripts/ingest.py sources/raw/3026.txt -o /tmp/f3026.txt --cut '^CONTENTS$' '^Mending Wall$' --drop '^\S'
 python scripts/ingest.py sources/raw/29345.txt -o /tmp/f29345.txt --start '^\s*CONTENTS\s*$' --end '^Transcriber Notes'
 python scripts/ingest.py sources/raw/58611.txt -o /tmp/f58611.txt --start '^\s*I met a lady from the South' --end '^\s*FOOTNOTES\s*$'
-{ cat /tmp/f3021.txt; echo; cat /tmp/f3026.txt; echo; cat /tmp/f29345.txt; echo; cat /tmp/f58611.txt; } > library/frost/clean.txt
+{ echo "## A Boy's Will"; echo; cat /tmp/f3021.txt; echo; echo '## North of Boston'; echo; cat /tmp/f3026.txt; echo; echo '## Mountain Interval'; echo; cat /tmp/f29345.txt; echo; echo '## New Hampshire'; echo; cat /tmp/f58611.txt; } > library/frost/clean.txt
 ```
 
 Then `python scripts/propose.py <poet>` and `python scripts/build_bank.py <poet>`.
@@ -237,6 +245,27 @@ and a prompt that says to read SKILL.md and follow it. The repository must
 be attached to the Routine; a Routine that only clones it from the prompt
 runs the scripts as untrusted code and the automatic permission check can
 refuse them.
+
+## Sections
+
+A day's draw comes from one section of the poet's work when the poet has
+sections and the section is big enough. Thirty-two words drawn from a
+whole career share only the poet; thirty-two drawn from one book share a
+world, so the fragments arrive already leaning toward a poem.
+
+`ingest.py --section REGEX` turns heading lines into markers (`## Name`)
+in `clean.txt`; a poet built from several texts gets markers written into
+the concatenation instead. `propose.py` records which sections each
+fragment appears in, the bank carries that, and `deal.py` picks one
+section per poet per day (seeded, so the pick is as stable as the draw)
+among those with at least `section_min_words` distinct words (400). A
+poet with no sections, or none big enough, deals from the whole bank. The
+colophon names the section: "Assembled from the words of Walt Whitman
+(Drum-Taps), 14 October 2026."
+
+`python scripts/deal.py sections --poet donne` lists a poet's sections.
+`--section NAME` on a draw forces one, `--section none` uses the whole
+bank, and `"sections": false` in settings turns the feature off.
 
 ## Calendar
 

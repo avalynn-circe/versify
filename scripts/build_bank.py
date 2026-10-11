@@ -51,10 +51,16 @@ def build(review: dict, meta: dict) -> dict:
         if len(it["fragment"].split()) > 2:
             raise ValueError(f"fragment longer than two words: {it['fragment']!r}")
         frag = {"text": it["fragment"], "type": it["type"], "count": int(it.get("count", 0))}
+        if it.get("sections"):
+            frag["sections"] = list(it["sections"])
         fragments.append(frag)
     if not fragments:
         raise ValueError("no approved fragments; nothing to build")
     fragments.sort(key=lambda f: (f["type"], -f["count"], f["text"]))
+    sections: dict = {}
+    for f in fragments:
+        for name in f.get("sections", []):
+            sections.setdefault(name, {"words": 0, "pairs": 0})[f["type"] + "s"] += 1
     return {
         "schema": 1,
         "id": meta["id"],
@@ -69,6 +75,7 @@ def build(review: dict, meta: dict) -> dict:
             "words": sum(1 for f in fragments if f["type"] == "word"),
             "pairs": sum(1 for f in fragments if f["type"] == "pair"),
         },
+        "sections": sections,
         "fragments": fragments,
     }
 
@@ -85,6 +92,7 @@ def write_catalog(library: Path = LIBRARY) -> dict:
             "id": b["id"], "name": b["name"], "color": b.get("color"),
             "words": b["counts"]["words"], "pairs": b["counts"]["pairs"],
             "reviewed": b.get("reviewed", False), "built": b.get("built"),
+            "sections": len(b.get("sections", {})),
             "sources": [src.get("title") for src in b.get("sources", [b.get("source", {})])],
         })
     catalog = {"generated": date.today().isoformat(), "poets": poets}
