@@ -25,7 +25,7 @@
   "reviewed": false,
   "built": "2026-10-11",
   "counts": {
-    "words": 5681,
+    "words": 5676,
     "pairs": 428
   },
   "fragments": [
@@ -17995,11 +17995,6 @@
       "count": 1
     },
     {
-      "text": "constable",
-      "type": "word",
-      "count": 1
-    },
-    {
       "text": "contain",
       "type": "word",
       "count": 1
@@ -19131,11 +19126,6 @@
     },
     {
       "text": "eddies",
-      "type": "word",
-      "count": 1
-    },
-    {
-      "text": "edinburgh",
       "type": "word",
       "count": 1
     },
@@ -25435,16 +25425,6 @@
       "count": 1
     },
     {
-      "text": "printed",
-      "type": "word",
-      "count": 1
-    },
-    {
-      "text": "printers",
-      "type": "word",
-      "count": 1
-    },
-    {
       "text": "prison's",
       "type": "word",
       "count": 1
@@ -29361,11 +29341,6 @@
     },
     {
       "text": "universe",
-      "type": "word",
-      "count": 1
-    },
-    {
-      "text": "university",
       "type": "word",
       "count": 1
     },

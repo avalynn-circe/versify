@@ -88,6 +88,11 @@ class IngestTests(unittest.TestCase):
         out, _ = ingest.clean(lines, None, None, [])
         self.assertNotIn("A CARAFE, THAT IS A BLIND GLASS.", out, "caps lines are titles by default")
 
+    def test_drop_cannot_leak_a_bracket_block(self):
+        lines = ["    [5 raigne, _1633_, _B_,", "    _P_, _S:_ range, _1635-69_]", "    A real verse line"]
+        out, _ = ingest.clean(lines, None, None, [r"_16[0-9]{2}"])
+        self.assertEqual(out, ["A real verse line"])
+
     def test_sub_unwraps_music_blocks(self):
         lines = ["[Illustration: a crocodile]", "[Music:", "    How doth the little crocodile", "    Improve his shining tail!]", "[Illustration]"]
         out, _ = ingest.clean(lines, None, None, [], subs=[(r"^\[Music:\s*$", ""), (r"^(?!\[)(.*)\]\s*$", r"\1")])
@@ -163,6 +168,16 @@ class BuildBankTests(unittest.TestCase):
         self.assertEqual(bank["source"]["url"], "u")
         self.assertEqual(bank["sources"], [meta["source"]])
         self.assertFalse(bank["reviewed"])
+
+    def test_stale_items_do_not_ship(self):
+        review = {"items": [
+            {"fragment": "lantern", "type": "word", "count": 3, "status": "approved"},
+            {"fragment": "gone", "type": "word", "count": 1, "status": "approved", "stale": True},
+            {"fragment": "cold frost", "type": "pair", "count": 0, "status": "approved", "stale": True, "manual": True},
+        ]}
+        meta = {"id": "s", "name": "N", "color": "#000", "source": {"title": "t", "edition": "e", "url": "u"}}
+        texts = {f["text"] for f in build_bank.build(review, meta)["fragments"]}
+        self.assertEqual(texts, {"lantern", "cold frost"})
 
     def test_multiple_sources(self):
         review = {"items": [{"fragment": "lantern", "type": "word", "count": 3, "status": "approved"}]}

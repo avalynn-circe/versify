@@ -150,6 +150,15 @@ def clean(lines: list[str], start: str | None, end: str | None,
             if out and out[-1] != "":
                 out.append("")
             continue
+        # Bracket blocks are recognized before --drop, so a drop pattern that
+        # happens to match a block's opening line cannot let the rest leak.
+        if BRACKET_RE.match(s):
+            stats["bracket"] += 1
+            continue
+        if s.lstrip().startswith("["):
+            in_bracket = True
+            stats["bracket"] += 1
+            continue
         if any(rx.search(s) for rx in drop_res):
             stats["drop"] += 1
             continue
@@ -158,13 +167,6 @@ def clean(lines: list[str], start: str | None, end: str | None,
             continue
         if not any(c.isalpha() for c in s):
             stats["symbols"] += 1
-            continue
-        if BRACKET_RE.match(s):
-            stats["bracket"] += 1
-            continue
-        if s.lstrip().startswith("["):
-            in_bracket = True
-            stats["bracket"] += 1
             continue
         if PAGE_RE.match(s):
             stats["editorial"] += 1

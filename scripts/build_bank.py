@@ -46,6 +46,8 @@ def build(review: dict, meta: dict) -> dict:
     for it in review["items"]:
         if it.get("status") != "approved":
             continue
+        if it.get("stale") and not it.get("manual"):
+            continue  # no longer in the corpus; kept in the review only for its decision
         if len(it["fragment"].split()) > 2:
             raise ValueError(f"fragment longer than two words: {it['fragment']!r}")
         frag = {"text": it["fragment"], "type": it["type"], "count": int(it.get("count", 0))}
