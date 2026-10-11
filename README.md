@@ -106,6 +106,39 @@ No code changes. Four steps and one evening of review.
    Add the poet id to `rotation` in `data/settings.json` to put them in the
    daily cycle.
 
+## Launch poet recipes
+
+The exact commands used for the two launch poets, so a re-run is one copy
+and paste. Both raw files are the Plain Text UTF-8 downloads from the
+URLs in `data/poets/<poet>.meta.json`, saved as `sources/raw/<id>.txt`.
+
+Dickinson (Gutenberg 12242). One cut removes each series' front matter,
+the three editors' prefaces and the transcriber's note, and ends at the
+first poem of each series:
+
+```bash
+python scripts/ingest.py sources/raw/12242.txt -o sources/clean/dickinson.txt \
+  --cut '^POEMS$' '^(I\. LIFE\.|\s+This is my letter to the world)'
+```
+
+Poe (Gutenberg 10031). The window starts after Ingram's memoir and ends
+before the prose poems and essays. Cuts remove Poe's own preface, the four
+notes sections, the verse drama Politian (speaker labels and stage
+directions would pollute the bank; it can be added back later), and the
+prose letter that introduces the 1831 poems:
+
+```bash
+python scripts/ingest.py sources/raw/10031.txt -o sources/clean/poe.txt \
+  --start '^\s*POEMS OF LATER LIFE\s*$' \
+  --end '^\s*PROSE POEMS\.\s*$' \
+  --cut '^PREFACE\.$' '^THE RAVEN\.$' \
+  --cut '^NOTES\.$' '^\s*(POEMS OF MANHOOD|AN UNPUBLISHED DRAMA|DOUBTFUL POEMS|PROSE POEMS)\.?\s*$' \
+  --cut '^\s*AN UNPUBLISHED DRAMA\.?\s*$' '^\s*POEMS OF YOUTH\s*$' \
+  --cut '^INTRODUCTION TO POEMS\.--1831\.$' '^SONNET--TO SCIENCE\.$'
+```
+
+Then `python scripts/propose.py dickinson` and `python scripts/propose.py poe`.
+
 ## Dealing
 
 ```bash

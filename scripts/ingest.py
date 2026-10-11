@@ -11,6 +11,12 @@ What gets removed:
   * Title and heading lines: lines with letters but no lowercase letters.
   * Roman numeral poem numbers, bare digits, bracketed editorial notes.
   * Any line matching a --drop REGEX (repeatable).
+  * Everything from a line matching --cut START up to, but not including,
+    the next line matching END (repeatable; a cut re-arms after it ends).
+    Use this for prefaces, notes sections and prose that sit between poems.
+  * Multi-line bracketed notes (a line opening with "[" through the line
+    that closes with "]") and lines with no letters at all (rules of
+    asterisks, bare dashes).
   * Runs of blank lines collapse to one, so stanza breaks survive.
 
 Always eyeball the cleaned file afterwards. Each Gutenberg edition is laid
@@ -53,9 +59,9 @@ def is_title(line: str) -> bool:
 
 
 def clean(lines: list[str], start: str | None, end: str | None,
-          drops: list[str]) -> tuple[list[str], dict]:
-    stats = {"boilerplate": 0, "window": 0, "title": 0, "number": 0,
-             "bracket": 0, "editorial": 0, "drop": 0, "kept": 0}
+          drops: list[str], cuts: list[tuple[str, str]] | None = None) -> tuple[list[str], dict]:
+    stats = {"boilerplate": 0, "window": 0, "cut": 0, "title": 0, "number": 0,
+             "symbols": 0, "bracket": 0, "editorial": 0, "drop": 0, "kept": 0}
     before = len(lines)
     lines = strip_boilerplate(lines)
     stats["boilerplate"] = before - len(lines)
@@ -76,9 +82,30 @@ def clean(lines: list[str], start: str | None, end: str | None,
                 break
 
     drop_res = [re.compile(d) for d in drops]
+    cut_res = [(re.compile(a), re.compile(b)) for a, b in (cuts or [])]
+    active_end = None
+    in_bracket = False
     out: list[str] = []
     for line in lines:
         s = line.rstrip()
+        if active_end is not None:
+            if active_end.search(s):
+                active_end = None  # the END line itself is processed normally below
+            else:
+                stats["cut"] += 1
+                continue
+        for start_rx, end_rx in cut_res:
+            if start_rx.search(s):
+                active_end = end_rx
+                stats["cut"] += 1
+                break
+        if active_end is not None:
+            continue
+        if in_bracket:
+            stats["bracket"] += 1
+            if s.rstrip().endswith("]"):
+                in_bracket = False
+            continue
         if not s.strip():
             if out and out[-1] != "":
                 out.append("")
@@ -89,7 +116,14 @@ def clean(lines: list[str], start: str | None, end: str | None,
         if ROMAN_RE.match(s) or DIGITS_RE.match(s):
             stats["number"] += 1
             continue
+        if not any(c.isalpha() for c in s):
+            stats["symbols"] += 1
+            continue
         if BRACKET_RE.match(s):
+            stats["bracket"] += 1
+            continue
+        if s.lstrip().startswith("["):
+            in_bracket = True
             stats["bracket"] += 1
             continue
         if PAGE_RE.match(s):
@@ -115,10 +149,12 @@ def main(argv=None) -> int:
     ap.add_argument("--start", help="regex; drop everything before the first match")
     ap.add_argument("--end", help="regex; drop everything from the first match onward")
     ap.add_argument("--drop", action="append", default=[], help="regex; drop matching lines (repeatable)")
+    ap.add_argument("--cut", nargs=2, action="append", default=[], metavar=("START", "END"),
+                    help="drop from a line matching START up to the next line matching END (repeatable)")
     args = ap.parse_args(argv)
 
     lines = read_lines(args.raw)
-    out, stats = clean(lines, args.start, args.end, args.drop)
+    out, stats = clean(lines, args.start, args.end, args.drop, [tuple(c) for c in args.cut])
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(out) + "\n", encoding="utf-8")
     print(f"wrote {args.out} ({stats['kept']} verse lines)")

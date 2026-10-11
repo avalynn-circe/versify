@@ -1,6 +1,6 @@
-# Raw and cleaned Gutenberg texts are inputs, not part of the skill.
+# Raw Gutenberg downloads stay out of the repo. The cleaned verse in sources/clean is committed
+# so review.py and propose.py work from a fresh clone.
 sources/raw/
-sources/clean/
 __pycache__/
 *.pyc
 *.skill

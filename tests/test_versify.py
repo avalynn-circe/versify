@@ -57,6 +57,21 @@ class IngestTests(unittest.TestCase):
         self.assertFalse(any("clover and the bee" in l for l in out))
 
 
+    def test_cut_blocks_multiline_brackets_and_symbol_lines(self):
+        lines = [
+            "PREFACE.", "Some prose about the poet.", "More prose.", "",
+            "THE LANTERN.", "[Published in a magazine",
+            "at the request of a friend.]", "The lantern swings,",
+            "       *       *       *", "NOTES.",
+            "1. The lantern was first printed in 1890.", "THE BUST.", "The bust is pale.",
+        ]
+        out, stats = ingest.clean(lines, None, None, [], cuts=[(r"^PREFACE", r"^THE LANTERN"), (r"^NOTES\.$", r"^THE BUST")])
+        self.assertEqual(out, ["The lantern swings,", "The bust is pale."])
+        self.assertEqual(stats["symbols"], 1)
+        self.assertEqual(stats["bracket"], 2)
+        self.assertGreaterEqual(stats["cut"], 5)
+
+
 class ProposeTests(unittest.TestCase):
     def setUp(self):
         lines, _ = ingest.clean(common.read_lines(FIXTURE), None, None, [])
