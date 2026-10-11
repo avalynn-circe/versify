@@ -206,6 +206,18 @@ be attached to the Routine; a Routine that only clones it from the prompt
 runs the scripts as untrusted code and the automatic permission check can
 refuse them.
 
+## Calendar
+
+`data/calendar.json` overrides the rotation on particular days. Each entry
+names a poet, a kind (`birthday`, `deathday` or `season`), a date as
+`MM-DD` or a `from` and `to` range, and a phrase that the colophon inserts
+after the poet's name ("Assembled from the words of Edgar Allan Poe, on the
+anniversary of his death, 7 October 2026."). Precedence on a day with
+several claims: birthday, then deathday, then season. Set `"deathdays":
+false` to ignore every deathday entry. An occasion changes the poet and
+the colophon, never the draw itself. `python scripts/deal.py calendar`
+lists the year's overrides; `--days 30` shows who is up each day.
+
 ## Settings
 
 `data/settings.json`: `draw` fragments dealt (32), `use` fragments the poem

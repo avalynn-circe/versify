@@ -77,7 +77,10 @@ poet per day, so the same day always yields the same draw.
    f. **Build toward the ending.** The last line is the shortest and the
       most concrete. End on a thing or an act, never on an abstraction.
    g. **Read the voice note** in the draw and lean into it. It describes
-      how this poet's lines move.
+      how this poet's lines move. If the draw carries an `occasion` (a
+      birthday, a death anniversary, a season), let it color the
+      arrangement when the fragments allow, and never force it; the
+      colophon already names the occasion, so the poem need not.
    h. **Do not use a rare word because it was dealt.** Use it because the
       poem needs it. "Subterfuge" and "acknowledgment" are in the bank;
       most days they should stay there.

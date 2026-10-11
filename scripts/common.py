@@ -99,6 +99,11 @@ def load_glue() -> dict:
             "once": [w.lower() for w in g.get("once", [])]}
 
 
+def load_calendar() -> dict:
+    path = DATA / "calendar.json"
+    return load_json(path) if path.exists() else {"deathdays": True, "events": []}
+
+
 def load_function_words() -> set[str]:
     return {w.lower() for w in load_json(DATA / "function-words.json")["words"]}
 

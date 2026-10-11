@@ -195,6 +195,29 @@ class DealTests(unittest.TestCase):
         deal.LIBRARY = cls._orig
         cls.tmp.cleanup()
 
+    def test_calendar_precedence_and_colophon(self):
+        cal = {"deathdays": True, "events": [
+            {"poet": "sample", "kind": "season", "from": "10-01", "to": "10-31", "phrase": "in October"},
+            {"poet": "sample", "kind": "deathday", "date": "10-07", "phrase": "on the anniversary of his death"},
+            {"poet": "sample", "kind": "birthday", "date": "10-07", "phrase": "on his birthday"},
+            {"poet": "nobody-else", "kind": "birthday", "date": "10-08", "phrase": "x"},
+        ]}
+        self.assertEqual(deal.occasion_for_date(date(2026, 10, 7), cal)["kind"], "birthday")
+        self.assertEqual(deal.occasion_for_date(date(2026, 10, 9), cal)["kind"], "season")
+        self.assertIsNone(deal.occasion_for_date(date(2026, 11, 1), cal))
+        # an event for a poet with no bank is skipped when availability is given
+        self.assertEqual(deal.occasion_for_date(date(2026, 10, 8), cal, {"sample"})["kind"], "season")
+        cal["deathdays"] = False
+        cal["events"].pop(2)
+        self.assertEqual(deal.occasion_for_date(date(2026, 10, 7), cal)["kind"], "season")
+        ev = {"poet": "sample", "kind": "birthday", "date": "10-13", "phrase": "on his birthday"}
+        d = deal.make_draw("sample", date(2026, 10, 13), 12, 6, "log", occasion=ev)
+        self.assertEqual(d["colophon"]["assembled_line"], "Assembled from the words of Nobody, on his birthday, 13 October 2026.")
+        self.assertEqual(d["occasion"]["kind"], "birthday")
+        plain = deal.make_draw("sample", date(2026, 10, 13), 12, 6, "log")
+        self.assertIsNone(plain["occasion"])
+        self.assertEqual(plain["fragments"], d["fragments"], "an occasion changes the colophon, never the draw")
+
     def test_library_listing_and_catalog(self):
         self.assertEqual(list(deal.list_banks()), ["sample"])
         cat = build_bank.write_catalog(self.poets.parent)

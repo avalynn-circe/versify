@@ -26,12 +26,14 @@ import math
 import random
 import sys
 from collections import Counter
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import (LIBRARY, load_glue, load_json, load_settings,  # noqa: E402
-                    stable_seed, tokenize_line)
+from common import (LIBRARY, load_calendar, load_glue, load_json,  # noqa: E402
+                    load_settings, stable_seed, tokenize_line)
+
+KIND_RANK = {"birthday": 0, "deathday": 1, "season": 2}
 
 
 def list_banks() -> dict[str, Path]:
@@ -57,6 +59,41 @@ def poet_for_date(day: date, settings: dict) -> str:
         raise SystemExit("no banks in the library")
     epoch = date.fromisoformat(settings["rotation_epoch"])
     return rotation[(day - epoch).days % len(rotation)]
+
+
+def _md(day: date) -> str:
+    return f"{day.month:02d}-{day.day:02d}"
+
+
+def event_matches(ev: dict, day: date) -> bool:
+    md = _md(day)
+    if "date" in ev:
+        return ev["date"] == md
+    return ev["from"] <= md <= ev["to"]
+
+
+def occasion_for_date(day: date, calendar: dict, available: set[str] | None = None) -> dict | None:
+    """The calendar event that claims this day, if any: birthday beats deathday beats season."""
+    found = []
+    for ev in calendar.get("events", []):
+        if ev.get("kind") == "deathday" and not calendar.get("deathdays", True):
+            continue
+        if available is not None and ev["poet"] not in available:
+            continue
+        if event_matches(ev, day):
+            found.append(ev)
+    if not found:
+        return None
+    found.sort(key=lambda e: (KIND_RANK.get(e.get("kind"), 9), e["poet"]))
+    return found[0]
+
+
+def choose_poet(day: date, settings: dict, calendar: dict) -> tuple[str, dict | None]:
+    """Today's poet: a calendar occasion if one claims the day, else the rotation."""
+    ev = occasion_for_date(day, calendar, set(list_banks()))
+    if ev:
+        return ev["poet"], ev
+    return poet_for_date(day, settings), None
 
 
 def weight_of(count: int, scheme: str) -> float:
@@ -91,7 +128,7 @@ def weighted_sample(rng: random.Random, items: list[dict], n: int, scheme: str) 
 
 
 def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
-              seed: int | None = None) -> dict:
+              seed: int | None = None, occasion: dict | None = None) -> dict:
     settings = load_settings()
     bank = load_bank(poet)
     seed_value = seed if seed is not None else stable_seed(poet, day.isoformat())
@@ -104,6 +141,7 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
     gids = ", ".join(str(x["gutenberg_id"]) for x in srcs if x.get("gutenberg_id"))
     source_line = f"Source: {titles} (Project Gutenberg" + (f" {gids})." if gids else ").")
     pretty_date = f"{day.day} {day.strftime('%B %Y')}"
+    phrase = f", {occasion['phrase']}" if occasion and occasion.get("phrase") else ""
     return {
         "poet": bank["id"],
         "poet_name": bank["name"],
@@ -116,8 +154,9 @@ def make_draw(poet: str, day: date, n: int, use: int, scheme: str,
         "lines": [settings.get("min_lines", 4), settings.get("max_lines", 8)],
         "voice": bank.get("voice", ""),
         "source": src,
+        "occasion": {"kind": occasion["kind"], "phrase": occasion.get("phrase", "")} if occasion else None,
         "colophon": {
-            "assembled_line": f"Assembled from the words of {bank['name']}, {pretty_date}.",
+            "assembled_line": f"Assembled from the words of {bank['name']}{phrase}, {pretty_date}.",
             "source_line": source_line,
         },
         "rules": [
@@ -138,6 +177,8 @@ def print_draw(draw: dict, fmt: str) -> None:
         print(json.dumps(draw, indent=2, ensure_ascii=False))
         return
     print(f"{draw['poet_name']}, {draw['date']}  (seed {draw['seed']})")
+    if draw.get("occasion"):
+        print(f"occasion: {draw['occasion']['kind']}, {draw['occasion']['phrase']}")
     print(f"use exactly {draw['use']} of these {len(draw['fragments'])} fragments:")
     for i, f in enumerate(draw["fragments"], 1):
         tag = "  [pair]" if f["type"] == "pair" else ""
@@ -324,6 +365,9 @@ def main(argv=None) -> int:
     p_check.add_argument("--use", type=int, help="override required fragment count")
     p_check.add_argument("--lines", type=int, nargs=2, metavar=("MIN", "MAX"), help="override the line bounds")
     sub.add_parser("poets", help="list available banks")
+    p_cal = sub.add_parser("calendar", help="list the year's overrides and who is up each day")
+    p_cal.add_argument("--year", type=int, default=date.today().year)
+    p_cal.add_argument("--days", type=int, help="print the next N days from today instead")
 
     args = ap.parse_args(argv)
 
@@ -333,13 +377,37 @@ def main(argv=None) -> int:
             b = load_json(path)
             print(f"{pid}: {b['name']} ({b['counts']['words']} words, {b['counts']['pairs']} pairs)")
         print("rotation: " + " -> ".join(settings["rotation"]) + f" from {settings['rotation_epoch']}")
-        print("today: " + poet_for_date(date.today(), settings))
+        today_poet, today_ev = choose_poet(date.today(), settings, load_calendar())
+        print("today: " + today_poet + (f"  ({today_ev['kind']}: {today_ev.get('phrase', '')})" if today_ev else ""))
+        return 0
+
+    if args.cmd == "calendar":
+        calendar = load_calendar()
+        if args.days:
+            start = date.today()
+            for i in range(args.days):
+                d = start + timedelta(days=i)
+                poet, ev = choose_poet(d, settings, calendar)
+                tag = f"  ({ev['kind']}: {ev.get('phrase', '')})" if ev else ""
+                print(f"{d.isoformat()}  {poet}{tag}")
+            return 0
+        print(f"overrides for {args.year}:")
+        for ev in sorted(calendar.get("events", []), key=lambda e: e.get("date") or e.get("from")):
+            if ev.get("kind") == "deathday" and not calendar.get("deathdays", True):
+                continue
+            when = ev.get("date") or f"{ev['from']} to {ev['to']}"
+            print(f"  {when:14s} {ev['poet']:10s} {ev['kind']:9s} {ev.get('phrase', '')}")
         return 0
 
     if args.cmd in ("today", "draw"):
         day = date.fromisoformat(args.date) if args.date else date.today()
-        poet = args.poet if args.cmd == "draw" else poet_for_date(day, settings)
-        draw = make_draw(poet, day, args.n, args.use, args.weight, args.seed)
+        calendar = load_calendar()
+        if args.cmd == "draw":
+            poet = args.poet
+            ev = occasion_for_date(day, calendar, {poet})
+        else:
+            poet, ev = choose_poet(day, settings, calendar)
+        draw = make_draw(poet, day, args.n, args.use, args.weight, args.seed, ev)
         if args.out:
             args.out.parent.mkdir(parents=True, exist_ok=True)
             args.out.write_text(json.dumps(draw, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
